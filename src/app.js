@@ -16,4 +16,9 @@ app.get( '/', ( req, res ) => {
 
 io.of( '/stream' ).on( 'connection', stream );
 
-server.listen( 3000 );
+let port = process.env.PORT;
+if (port == null || port == "") {
+  port = 3000;
+}
+
+server.listen( port,()=>console.log('App is connected on port 3000'));
