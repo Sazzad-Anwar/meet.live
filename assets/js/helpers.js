@@ -110,15 +110,15 @@ export default {
     getIceServer() {
         return {
             iceServers: [
-                // {
-                //     urls: ["numb.viagenie.ca"]
-                // },
                 {
-                    username: " sazzadzihan@gmail.com",
-                    credential: "sazzad123098765",
-                    urls: [
-                        "numb.viagenie.ca"
-                    ]
+                    urls: ["stun:stun.royex.io"]
+                },
+                {
+                    "urls": ["turn:turn.royex.io:3478?transport=udp",
+                             "turn:turn.royex.io:5349?transport=tcp"
+                           ],
+                    "username": "royex",
+                    "credential": "12345"
                 }
             ]
         };
