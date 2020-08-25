@@ -5,7 +5,7 @@
   "main": "src/app.js",
   "dependencies": {
     "express": "^4.17.1",
-    "serve-favicon": "^2.5.0",
+    "morgan": "^1.10.0",
     "socket.io": "^2.3.0"
   },
   "devDependencies": {
@@ -14,7 +14,7 @@
   "scripts": {
     "watch": "nodemon --watch \"src/\" --exec \"node src/app.js\"",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start":"nodemon app.js"
+    "start": "node app.js"
   },
   "repository": {
     "type": "git",
@@ -26,7 +26,6 @@
   ],
   "author": "sazzad",
   "license": "ISC",
-
   "engines": {
     "node": "12.16.1"
   }

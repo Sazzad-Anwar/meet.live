@@ -3,8 +3,11 @@ let app = express();
 let server = require( 'http' ).Server( app );
 let io = require( 'socket.io' )( server );
 let stream = require( './ws/stream' );
+let morgan = require('morgan');
 let path = require( 'path' );
 // let favicon = require( 'favicon' );
+
+app.use(morgan('common'))
 
 // app.use( favicon( path.join( __dirname, 'favicon.ico' ) ) );
 app.use( '/assets', express.static( path.join( __dirname, 'assets' ) ) );
@@ -21,4 +24,4 @@ if (port == null || port == "") {
   port = 3939;
 }
 
-server.listen( port,()=>console.log('App is connected on port 3000'));
+server.listen( port,()=>console.log('App is connected on port 3939'));
