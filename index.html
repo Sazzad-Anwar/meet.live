@@ -4,11 +4,18 @@
         <title>Video App</title>
 
         <meta content="width=device-width, initial-scale=1" name="viewport" />
-        <link rel="icon" href="https://picsum.photos/20/20" /> 
+        <!-- <link rel="icon" href="https://picsum.photos/20/20" />  -->
 
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
         <link rel='stylesheet' href='assets/css/app.css' type="text/css">
+
+        <!-- UIkit CSS -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.5.7/dist/css/uikit.min.css" />
+
+        <!-- UIkit JS -->
+        <script src="https://cdn.jsdelivr.net/npm/uikit@3.5.7/dist/js/uikit.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/uikit@3.5.7/dist/js/uikit-icons.min.js"></script>
 
         <script src='/socket.io/socket.io.js'></script>
         <script type="module" src='assets/js/rtc.js'></script>
@@ -71,7 +78,8 @@
             </div>
         </nav>
 
-        <div class="container-fluid" id='room-create' hidden>
+        create room -->
+        <!-- <div class="container-fluid" id='room-create' hidden>
             <div class="row">
                 <div class="col-12 h2 mt-5 text-center">Create Room</div>
             </div>
@@ -99,6 +107,9 @@
             </div>
         </div>
 
+        <!-- <div class="uk-container uk-container-large">
+            <h1 class="uk-text-center">royex.live</h1>
+        </div> -->
 
 
         <div class="container-fluid" id='username-set' hidden>

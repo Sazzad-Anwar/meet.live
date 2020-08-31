@@ -22,10 +22,11 @@ io.on("connection", ()=>{
   console.log('connected');
 });
 
+
 let port = process.env.PORT;
 if (port == null || port == "") {
   port = 3939;
 }
-app.use(enforce.HTTPS());
+app.use(enforce.HTTPS({ trustProtoHeader: true }));
 
 server.listen( port,()=>console.log(`App is connected on port ${port}`));
