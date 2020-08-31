@@ -5,7 +5,7 @@ let io = require( 'socket.io' )( server );
 let stream = require( './ws/stream' );
 let morgan = require('morgan');
 let path = require( 'path' );
-var enforce = require('express-sslify');
+var secure = require('ssl-express-www');
 
 app.use(morgan('common'))
 
@@ -27,6 +27,7 @@ let port = process.env.PORT;
 if (port == null || port == "") {
   port = 3939;
 }
-app.use(enforce.HTTPS({ trustProtoHeader: true }));
+
+app.use(secure);
 
 server.listen( port,()=>console.log(`App is connected on port ${port}`));
