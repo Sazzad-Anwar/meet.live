@@ -5,9 +5,9 @@ let io = require( 'socket.io' )( server );
 let stream = require( './ws/stream' );
 let morgan = require('morgan');
 let path = require( 'path' );
-var sslRedirect = require('heroku-ssl-redirect');
+//var sslRedirect = require('heroku-ssl-redirect');
 
-app.use(sslRedirect());
+//app.use(sslRedirect());
 
 app.use(morgan('common'))
 
