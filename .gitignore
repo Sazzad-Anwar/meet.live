@@ -11,6 +11,7 @@ pids
 # Dependency directories
 /node_modules
 npm-debug.log
+new.html
 .DS_Store
 /*.env
 

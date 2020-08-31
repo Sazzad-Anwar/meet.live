@@ -230,3 +230,21 @@
         z-index: 1000;
     }
 }
+
+.royex-title{
+    font-family: 'Lexend Peta', sans-serif;
+    font-size: 4rem;
+    color: #fff;
+}
+
+body{
+    background: #2376BC;
+}
+
+.font-family{
+    font-family: 'Lexend Peta', sans-serif;
+}
+
+.white-background{
+    background-color: #ffff;
+}
