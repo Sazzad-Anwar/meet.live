@@ -48,17 +48,16 @@ window.addEventListener( 'load', () => {
         }
     } );
 
-
     //When the 'Create room" is button is clicked
     document.getElementById( 'create-room' ).addEventListener( 'click', ( e ) => {
         e.preventDefault();
-
         let roomName = document.querySelector( '#room-name' ).value;
         let yourName = document.querySelector( '#your-name' ).value;
+        let yourEmail = document.querySelector( '#your-email' ).value;
 
-        if ( roomName && yourName ) {
+        if ( roomName && yourName && yourEmail ) {
             //remove error message, if any
-            document.querySelector( '#err-msg' ).innerHTML = "";
+            // document.querySelector( '#err-msg' ).innerHTML = "";
 
             //save the user's name in sessionStorage
             sessionStorage.setItem( 'username', yourName );
@@ -67,16 +66,30 @@ window.addEventListener( 'load', () => {
             let roomLink = `${ location.origin }?room=${ roomName.trim().replace( ' ', '_' ) }_${ helpers.generateRandomString() }`;
 
             //show message with link to room
-            document.querySelector( '#room-created' ).innerHTML = `Room successfully created. Click <a href='${ roomLink }'>here</a> to enter room. 
-                Share the room link with your partners.`;
+            document.querySelector( '#room-created' ).innerHTML = `${ roomLink }`;
+            document.querySelector( '#room-id' ).innerHTML = `Meeting ID: ${ roomName.trim().replace( ' ', '_' ) }_${ helpers.generateRandomString() }`;
+            document.querySelector('#room-creation').classList.remove('uk-hidden')
+            document.querySelector('#room-create').classList.add('uk-hidden')
 
             //empty the values
             document.querySelector( '#room-name' ).value = '';
             document.querySelector( '#your-name' ).value = '';
+            document.querySelector( '#your-email' ).value = '';
         }
+        else if(!roomName) {
+            document.getElementById('alert-room-name').classList.remove('uk-hidden')
+            document.querySelector( '#err-msg-room-name' ).innerHTML = "Room Name required";
 
-        else {
-            document.querySelector( '#err-msg' ).innerHTML = "All fields are required";
+        }
+        else if(!yourName) {
+            document.getElementById('alert-name').classList.remove('uk-hidden')
+            document.querySelector( '#err-msg-name' ).innerHTML = "Your name required";
+
+        }
+        else if(!yourEmail) {
+            document.getElementById('alert-email').classList.remove('uk-hidden')
+            document.querySelector( '#err-msg-email' ).innerHTML = "Your email required";
+
         }
     } );
 
@@ -99,7 +112,7 @@ window.addEventListener( 'load', () => {
         }
 
         else {
-            document.querySelector( '#err-msg-username' ).innerHTML = "Please input your name";
+            document.querySelector( '#err-msg-username' ).innerHTML = "Your name is required !";
         }
     } );
 

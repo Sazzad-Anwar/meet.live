@@ -4,6 +4,7 @@
   "description": "A conference call implementation using WebRTC, Socket.io and Node.js.",
   "main": "src/app.js",
   "dependencies": {
+    "ejs": "^3.1.5",
     "express": "^4.17.1",
     "heroku-ssl-redirect": "^0.1.1",
     "morgan": "^1.10.0",

@@ -1,15 +1,15 @@
 .chat-col{
     right: -100vw;
     bottom: 0;
-    top: 40.5px;
-    z-index: 1000;
+    /* z-index: 1000; */
     position: fixed;
-    color: #fff;
+    color: #000;
     padding-right: 5px;
     padding-left: 5px;
     padding-bottom: 40px;
     padding-top: 15px;
-    min-height: 100vh;
+    min-height: 90vh;
+    
 }
 
 .chat-col.chat-opened {
@@ -22,33 +22,35 @@
 }
 
 #chat-messages{
-    height: 70vh;
-    margin-bottom: 20px;
+    max-height: 70vh;
+    /* margin-bottom: 20px; */
     overflow-x: hidden;
     overflow-y: auto;
+    padding: 13px;
     scrollbar-width: none; /* Firefox */
     -ms-overflow-style: none;  /* IE 10+ */
 }
 
 #chat-messages::-webkit-scrollbar {
     width: 0px;  /* remove scrollbar space */
-    background: transparent;
+    display: none;
 }
 
 .chat-box{
-    bottom: 30px;
+    bottom: 0px;
     right: 0;
     position: absolute;
     border: 0;
     border-top: 1px groove white;
-    border-left: 1px groove white;
-    font-size: small;
+    /* border-left: 1px groove white; */
+    /* font-size: small; */
+    font-family: 'Ubuntu', sans-serif !important;
 }
 
 .chat-box::placeholder{
-    font-size: small;
     font-weight: lighter;
-    font-style: italic;
+    text-align: center;
+    /* font-style: italic; */
 }
 
 .chat-box,
@@ -67,11 +69,11 @@
 }
 
 
-.remote-video{
+/* .remote-video{
     width:100%;
     height:auto;
     max-height: 90vh;
-}
+} */
 
 
 .remote-video-controls{
@@ -109,9 +111,11 @@
 
 
 .sender-info{
-    font-size: smaller;
+    font-size: 1rem;
     margin-top: 5px;
     align-self: flex-end;
+    margin-left: 23px;
+    font-family: 'Ubuntu', sans-serif;
 }
 
 
@@ -125,6 +129,7 @@
 
 .chat-card{
     border-radius: 6px;
+    font-size: 17px;
 }
 
 
@@ -212,10 +217,10 @@
         margin-bottom: 0px;
     }
     
-    .card-sm{
+    /* .card-sm{
         max-width: 100%;
         min-width: 50%;
-    }
+    } */
 
 
     .local-video{
@@ -231,14 +236,20 @@
     }
 }
 
+/* last edited CSS */
 .royex-title{
     font-family: 'Lexend Peta', sans-serif;
-    font-size: 4rem;
+    font-size: 7rem;
     color: #fff;
 }
 
+.text-font{
+    font-family: 'Noto Sans', sans-serif;
+}
+
 body{
-    background: #2376BC;
+    background-image: url("../img/royex_bg.jpg");
+    min-height: 100vh;
 }
 
 .font-family{
@@ -247,4 +258,26 @@ body{
 
 .white-background{
     background-color: #ffff;
+}
+
+.uk-notification{
+    background-color: #9FC6E7 !important;
+    border-radius: 7px;
+}
+
+.uk-notification-message{
+    border-radius: 7px;
+    background-color: #8ec3ee !important;
+    text-align: center;
+    font-family: 'Lexend Peta', sans-serif;
+    color: #000 !important;
+    font-weight: bolder;
+}
+
+.text-white{
+    color:white !important;
+}
+
+.chat-bg{
+    background-color: #b2aaaa;
 }

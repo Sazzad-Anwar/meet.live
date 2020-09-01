@@ -5,16 +5,18 @@ let io = require( 'socket.io' )( server );
 let stream = require( './ws/stream' );
 let morgan = require('morgan');
 let path = require( 'path' );
-//var sslRedirect = require('heroku-ssl-redirect');
+// var sslRedirect = require('heroku-ssl-redirect');
 
-//app.use(sslRedirect());
+// app.use(sslRedirect());
 
 app.use(morgan('common'))
+
+app.set('view engine','ejs');
 
 app.use( '/assets', express.static( path.join( __dirname, 'assets' ) ) );
 
 app.get( '/', ( req, res ) => {
-    res.sendFile( __dirname + '/index.html' );
+    res.render('index');
 } );
 
 

@@ -127,31 +127,34 @@ export default {
 
     addChat( data, senderType ) {
         let chatMsgDiv = document.querySelector( '#chat-messages' );
-        let contentAlign = 'justify-content-end';
-        let senderName = 'You';
-        let msgBg = 'bg-white';
+        let contentAlign = 'uk-text-left px-4 ml-2';
+        let senderName = 'you';
+        let msgBg = 'chat-bg';
 
         if ( senderType === 'remote' ) {
-            contentAlign = 'justify-content-start';
+            contentAlign = 'uk-text-left mx-4 ml-2';
             senderName = data.sender;
-            msgBg = '';
+            msgBg = 'chat-bg';
 
             this.toggleChatNotificationBadge();
         }
 
         let infoDiv = document.createElement( 'div' );
-        infoDiv.className = 'sender-info';
-        infoDiv.innerHTML = `${ senderName } - ${ moment().format( 'Do MMMM, YYYY h:mm a' ) }`;
+        infoDiv.className = 'sender-info ml-0';
+        // infoDiv.innerHTML = `${ senderName } - ${ moment().format( 'Do MMMM, YYYY h:mm a' ) }`;
+        infoDiv.innerHTML = `@${ senderName } | ${ moment().format( 'h:mm a' ) }`;
 
         let colDiv = document.createElement( 'div' );
-        colDiv.className = `col-10 card chat-card msg ${ msgBg }`;
+        colDiv.className = `col-10 card chat-card msg ${ msgBg } p-2`;
         colDiv.innerHTML = xssFilters.inHTMLData( data.msg ).autoLink( { target: "_blank", rel: "nofollow"});
 
         let rowDiv = document.createElement( 'div' );
         rowDiv.className = `row ${ contentAlign } mb-2`;
 
 
-        colDiv.appendChild( infoDiv );
+        // colDiv.appendChild( infoDiv );
+        // rowDiv.appendChild( colDiv );
+        rowDiv.appendChild( infoDiv );
         rowDiv.appendChild( colDiv );
 
         chatMsgDiv.appendChild( rowDiv );
@@ -288,7 +291,7 @@ export default {
     },
 
 
-    createDemoRemotes( str, total = 6 ) {
+    createDemoRemotes( str, total = 20 ) {
         let i = 0;
 
         let testInterval = setInterval( () => {
@@ -306,7 +309,8 @@ export default {
 
             //create a new div for card
             let cardDiv = document.createElement( 'div' );
-            cardDiv.className = 'card card-sm';
+            // cardDiv.className = 'card card-sm';
+            cardDiv.className = 'uk-card uk-card-default';
             cardDiv.id = `demo-${ i }`;
             cardDiv.appendChild( newVid );
             cardDiv.appendChild( controlDiv );
