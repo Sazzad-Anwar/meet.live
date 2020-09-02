@@ -14,7 +14,6 @@ export default {
         }
     },
 
-
     pageHasFocus() {
         return !( document.hidden || document.onfocusout || window.onpagehide || window.onblur );
     },
@@ -124,18 +123,37 @@ export default {
         };
     },
 
+    addParticipent(data,senderType){
+        let user=''
+        if ( senderType === 'remote' ) {
+            senderName = data.sender;
+            user = senderName
+            this.toggleChatNotificationBadge();
+        }else{
+            user= 'You'
+        }
+
+        var participantDiv = document.getElementById('participant')
+
+        let participantName = document.createElement('div')
+        participantName.className = 'sender-info'
+        participantName.innerHTML = user;
+
+        participantDiv.appendChild(participantName)
+    },
 
     addChat( data, senderType ) {
         let chatMsgDiv = document.querySelector( '#chat-messages' );
-        let contentAlign = 'uk-text-left px-4 ml-2';
+        let contentAlign = 'uk-text-left ml-4 pl-1';
         let senderName = 'you';
         let msgBg = 'chat-bg';
+        let user=''
 
         if ( senderType === 'remote' ) {
-            contentAlign = 'uk-text-left mx-4 ml-2';
+            contentAlign = 'uk-text-left ml-4 pl-1';
             senderName = data.sender;
             msgBg = 'chat-bg';
-
+            user = senderName
             this.toggleChatNotificationBadge();
         }
 
@@ -148,9 +166,11 @@ export default {
         colDiv.className = `col-10 card chat-card msg ${ msgBg } p-2`;
         colDiv.innerHTML = xssFilters.inHTMLData( data.msg ).autoLink( { target: "_blank", rel: "nofollow"});
 
+        colDiv.style.wordBreak = 'break-all'
+        colDiv.style.minWidth = '97%'
+
         let rowDiv = document.createElement( 'div' );
         rowDiv.className = `row ${ contentAlign } mb-2`;
-
 
         // colDiv.appendChild( infoDiv );
         // rowDiv.appendChild( colDiv );
@@ -172,7 +192,7 @@ export default {
 
     toggleChatNotificationBadge() {
         if ( document.querySelector( '#chat-pane' ).classList.contains( 'chat-opened' ) ) {
-            document.querySelector( '#new-chat-notification' ).setAttribute( 'hidden', true );
+            // document.querySelector( '#new-chat-notification' ).setAttribute( 'hidden', true );
         }
 
         else {
@@ -300,6 +320,8 @@ export default {
             newVid.srcObject = str;
             newVid.autoplay = true;
             newVid.className = 'remote-video';
+
+            console.log(this.addParticipent());
 
             //video controls elements
             let controlDiv = document.createElement( 'div' );

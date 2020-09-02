@@ -1,32 +1,39 @@
 import helpers from './helpers.js';
 
 window.addEventListener( 'load', () => {
+
+    //show participent's name
+    // function participant(name){
+    //     document.querySelector('.participant-name').innerHTML = name;
+    // }
+
     //When the chat icon is clicked
-    document.querySelector( '#toggle-chat-pane' ).addEventListener( 'click', ( e ) => {
-        let chatElem = document.querySelector( '#chat-pane' );
-        let mainSecElem = document.querySelector( '#main-section' );
 
-        if ( chatElem.classList.contains( 'chat-opened' ) ) {
-            chatElem.setAttribute( 'hidden', true );
-            mainSecElem.classList.remove( 'col-md-9' );
-            mainSecElem.classList.add( 'col-md-12' );
-            chatElem.classList.remove( 'chat-opened' );
-        }
-
-        else {
-            chatElem.attributes.removeNamedItem( 'hidden' );
-            mainSecElem.classList.remove( 'col-md-12' );
-            mainSecElem.classList.add( 'col-md-9' );
-            chatElem.classList.add( 'chat-opened' );
-        }
-
-        //remove the 'New' badge on chat icon (if any) once chat is opened.
-        setTimeout( () => {
-            if ( document.querySelector( '#chat-pane' ).classList.contains( 'chat-opened' ) ) {
-                helpers.toggleChatNotificationBadge();
+        // document.querySelector( '#toggle-chat-pane' ).addEventListener( 'click', ( e ) => {
+            let chatElem = document.querySelector( '#chat-pane' );
+            let mainSecElem = document.querySelector( '#main-section' );
+    
+            if ( chatElem.classList.contains( 'chat-opened' ) ) {
+                chatElem.setAttribute( 'hidden', true );
+                mainSecElem.classList.remove( 'col-md-9' );
+                mainSecElem.classList.add( 'col-md-12' );
+                chatElem.classList.remove( 'chat-opened' );
             }
-        }, 300 );
-    } );
+    
+            else {
+                // chatElem.attributes.removeNamedItem( 'hidden' );
+                mainSecElem.classList.remove( 'col-md-12' );
+                mainSecElem.classList.add( 'col-md-9' );
+                chatElem.classList.add( 'chat-opened' );
+            }
+    
+            //remove the 'New' badge on chat icon (if any) once chat is opened.
+            setTimeout( () => {
+                if ( document.querySelector( '#chat-pane' ).classList.contains( 'chat-opened' ) ) {
+                    helpers.toggleChatNotificationBadge();
+                }
+            }, 300 );
+        // } );
 
 
     //When the video frame is clicked. This will enable picture-in-picture
@@ -66,7 +73,7 @@ window.addEventListener( 'load', () => {
             let roomLink = `${ location.origin }?room=${ roomName.trim().replace( ' ', '_' ) }_${ helpers.generateRandomString() }`;
 
             //show message with link to room
-            document.querySelector( '#room-created' ).innerHTML = `${ roomLink }`;
+            document.querySelector( '#room-created' ).value = `${ roomLink }`;
             document.querySelector( '#room-id' ).innerHTML = `Meeting ID: ${ roomName.trim().replace( ' ', '_' ) }_${ helpers.generateRandomString() }`;
             document.querySelector('#room-creation').classList.remove('uk-hidden')
             document.querySelector('#room-create').classList.add('uk-hidden')
@@ -78,17 +85,17 @@ window.addEventListener( 'load', () => {
         }
         else if(!roomName) {
             document.getElementById('alert-room-name').classList.remove('uk-hidden')
-            document.querySelector( '#err-msg-room-name' ).innerHTML = "Room Name required";
+            document.querySelector( '#err-msg-room-name' ).innerHTML = "Room Name is required";
 
         }
         else if(!yourName) {
             document.getElementById('alert-name').classList.remove('uk-hidden')
-            document.querySelector( '#err-msg-name' ).innerHTML = "Your name required";
+            document.querySelector( '#err-msg-name' ).innerHTML = "Your name is required";
 
         }
         else if(!yourEmail) {
             document.getElementById('alert-email').classList.remove('uk-hidden')
-            document.querySelector( '#err-msg-email' ).innerHTML = "Your email required";
+            document.querySelector( '#err-msg-email' ).innerHTML = "Your email is required";
 
         }
     } );

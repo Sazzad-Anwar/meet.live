@@ -39,8 +39,7 @@
 </head>
 
 <body class="uk-height-viewport">
-    <div class="uk-height-viewport">
-
+    <div class="" id="main-body">
         <div class="custom-modal" id='recording-options-modal'>
             <div class="custom-modal-content">
                 <div class="row text-center">
@@ -135,11 +134,11 @@
                 <div class="uk-child-width-1-2@m uk-child-width-1-1@s uk-grid uk-grid-match" uk-grid>
                     <div>
                         <div class="uk-card border uk-padding white-background uk-border-rounded">
-                            <h1 class="uk-text-center mb-5">Start New <strong> Meeting </strong></h1>
+                            <h1 class="uk-text-center mb-5">Start New <strong><span style="color: #2376BC;">Meeting</span> </strong></h1>
 
                             <div class="uk-margin">
                                 <div class="uk-inline uk-width-1-1">
-                                    <span class="uk-form-icon" uk-icon="icon: commenting"></span>
+                                    <span class="uk-form-icon form-icon"><img src="../assets/img/mn.png" alt="input-img"></span>
                                     <input class="uk-input py-4" id='room-name' placeholder="Meeting Name" required
                                         type="text">
                                 </div>
@@ -150,7 +149,7 @@
                             </div>
                             <div class="uk-margin">
                                 <div class="uk-inline uk-width-1-1">
-                                    <span class="uk-form-icon" uk-icon="icon: user"></span>
+                                    <span class="uk-form-icon form-icon"><img src="../assets/img/fn.png" alt="input-img"></span>
                                     <input class="uk-input py-4" id='your-name' required placeholder="Name" type="text">
                                 </div>
                                 <div class="uk-alert-danger uk-hidden" id="alert-name" uk-alert>
@@ -160,7 +159,7 @@
                             </div>
                             <div class="uk-margin">
                                 <div class="uk-inline uk-width-1-1">
-                                    <span class="uk-form-icon" uk-icon="icon: mail"></span>
+                                    <span class="uk-form-icon form-icon"><img src="../assets/img/sn.png" alt="input-img"></span>
                                     <input class="uk-input py-4" placeholder="Your Email" required id='your-email'
                                         type="email">
                                 </div>
@@ -182,7 +181,7 @@
                     <!-- Join Meeting Part -->
                     <div>
                         <div class="uk-card border uk-padding white-background uk-border-rounded">
-                            <h1 class="uk-text-center mb-5">Join <br><strong> Meeting </strong></h1>
+                            <h1 class="uk-text-center mb-5">Join <br><strong><span style="color:#622C80">Meeting</span> </strong></h1>
                             <br><br>
                             <div class="uk-margin uk-width-1-1">
                                 <div class="uk-form-controls">
@@ -200,7 +199,7 @@
                             </div>
                             <div class="uk-margin uk-hidden" id="meeting-ID">
                                 <div class="uk-inline uk-width-1-1">
-                                    <span class="uk-form-icon" uk-icon="icon:  video-camera"></span>
+                                    <span class="uk-form-icon form-icon"><img src="../assets/img/mn.png" alt="input-img"></span>
                                     <input class="uk-input py-4" id="room-join-id"
                                         placeholder="Please input the Meeting ID" type="text">
                                 </div>
@@ -211,7 +210,7 @@
                             </div>
                             <div class="uk-margin uk-hidden" id="url">
                                 <div class="uk-inline uk-width-1-1">
-                                    <span class="uk-form-icon" uk-icon="icon: link"></span>
+                                    <img src="../assets/img/mn.png" alt="input-img">
                                     <input class="uk-input py-4" id="room-join-url"
                                         placeholder="Please input the Meeting URL" type="text">
                                 </div>
@@ -252,16 +251,27 @@
                     <h2 class="uk-text-bold text-font" id="room-id" style="color:#fff"></h2>
                 </div>
                 <div class="uk-text-center uk-container uk-container-xsmall">
-                    <p class="text-font white-background uk-padding-small uk-margin-large-left uk-margin-large-right"><i
-                            class="fas fa-video mr-5"></i><span id="room-created"></span></p>
+                    <!-- <p class="text-font white-background uk-padding-small uk-margin-large-left uk-margin-large-right"><span id="room-created"></span></p> -->
+                    <div class="uk-margin">
+                        <div class="uk-inline uk-width-1-1">
+                            <span class="uk-form-icon form-icon"><img src="../assets/img/mn.png" alt="input-img"></span>
+                            <input class="uk-input py-4 uk-text-center" id='room-created' placeholder="Meeting Name" readonly
+                                type="text">
+                        </div>
+                    </div>
+
                     <div class="mx-5 uk-margin-large-right uk-margin-large-left">
                         <div class="mx-5 uk-margin-large-right uk-margin-large-left">
                             <div class="uk-child-width-1-2@m uk-child-width-1-1@s uk-grid-match" uk-grid>
                                 <div>
                                     <button
                                         class="uk-button uk-button-secondary py-1 uk-border-rounded uk-box-shadow-hover-xlarge"
-                                        onclick="UIkit.notification({message: 'Copied !', status: 'success'});copyClipBoard('#room-created')"><i
-                                            class="far fa-copy pr-2 uk-text-large"></i>Copy Link</button>
+                                        onclick="UIkit.notification({message: 'Copied !', status: 'success'});copyClipBoard('#room-created')">
+                                        <div class="uk-inline">
+                                            <span class="uk-form-icon form-icon "style="position: absolute;left: -6vh;"><img src="../assets/img/linkbtn.png" alt="input-img"></span>
+                                            <div>Copy Link</div>
+                                        </div>
+                                    </button>
                                 </div>
                                 <div>
                                     <button class="uk-button uk-border-rounded py-1 border uk-box-shadow-hover-xlarge"
@@ -322,31 +332,29 @@
         </div>
 
         <!-- video window appearing settings -->
-        <div class="room-comm" id="main-section" style="margin-top: 10vh;" hidden>
-            <div class="uk-child-width-1-4@m uk-child-width-1-2@s uk-grid-collapse" id='videos' uk-grid>
-                <div class="border">
+        <div class="room-comm" id="main-section" style="margin-top: 10vh;background-color: #000;min-height: 84vh;min-width: 85vw;" hidden>
+            <div class="uk-child-width-1-4@m uk-child-width-1-2 pt-3 uk-child-width-1-4@l uk-child-width-1-4@xl uk-grid-collapse mx-3" id='videos' uk-grid>
+                <div style="border: 3px solid #622C80">
                     <video class="mirror-mode" id='local' volume='0' autoplay muted></video>
                 </div>
             </div>
-        </div>
         
-        <!-- chat settings -->
-        <div class="row uk-position-bottom">
-            <div class="uk-width-1-5 chat-col d-print-none mb-2 mt-3 border white-background p-0" id='chat-pane' hidden>
-                <div class="row">
-                    <div class="col-12 uk-text-left h2 mb-3 p-2 pl-5 uk-text-large text-font" style="background: #622C80;color: #fff;">CHAT</div>
-                </div>
+        
+            <!-- chat settings -->
+            <div class="row">
+                <div class="uk-width-1-5 chat-col d-print-none mb-2 mt-3 border white-background p-0" id='chat-pane'>
+                    <div class="row uk-hidden" id="participant">
+                        <div class="col-12 uk-text-left h2 mb-3 p-2 pl-5 uk-text-large text-font" style="background: #622C80;color: #fff;">Participents</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 uk-text-left h2 mb-3 p-2 pl-5 uk-text-large text-font" style="background: #622C80;color: #fff;">Chat</div>
+                    </div>
 
-                <div class="row uk-overflow-auto" id='chat-messages'></div>
-                <!-- <div class="uk-inline">
-                    <i class="fas fa-paper-plane"></i>
-                    <textarea id='chat-input' class="uk-textarea rounded-0 chat-box text-font border-info" rows='3'
-                        placeholder="Type here"></textarea>
-                </div> -->
-                <div class="row">
-
-                    <textarea id='chat-input' style="border-left:none;border-right: none;" class="uk-textarea rounded-0 pb-0 chat-box text-font border-info" rows='3'
-                        placeholder="Type here & press enter to send"></textarea>
+                    <div class="row" id='chat-messages'></div>
+                    <div class="row">
+                        <textarea id='chat-input' style="border-left:none;border-right: none;" class="uk-textarea rounded-0 pb-0 chat-box text-font border-info" rows='3'
+                            placeholder="Type here & press enter to send"></textarea>
+                    </div>
                 </div>
             </div>
         </div>
@@ -354,16 +362,15 @@
         <br>
     </div>
 
-
     <!-- footer -->
-    <div class="uk-visible@m " style="background-color: #000;">
+    <div class="uk-visible@m uk-position-bottom" style="background-color: #161616;">
         <div class="uk-container uk-container-xlarge uk-text-right">
             <div class="uk-inline py-3">
                 <h5 class="mb-1 text-font" style="color: #fff;">Developed by Royex Technologies</h5>
             </div>
         </div>
     </div>
-    <div class="uk-hidden@m" style="background-color: #000;">
+    <div class="uk-hidden@m" style="background-color: #161616;">
         <div class="uk-container uk-container-xlarge uk-text-center">
             <div class="uk-inline py-3">
                 <h5 class="mb-1 text-font" style="color: #fff;">Developed by Royex Technologies</h5>
@@ -383,7 +390,7 @@
 
         //when clicked on Start now button
         function roomLink() {
-            var link = $('#room-created').text();
+            var link = $('#room-created').val();
             $('#start-meeting').attr('href', link);
         }
 
@@ -415,7 +422,6 @@
                         "Meeting Link is required !";
                 }
                 if (ID) {
-                    console.log(ID);
                     window.location = `/?room=${ID}`;
                 } else if (!ID) {
                     document.getElementById('alert-room-id').classList.remove('uk-hidden')
@@ -432,7 +438,6 @@
                     $('#alert-username').removeClass('uk-hidden')
                 }
             });
-            console.log();
         });
     </script>
 </body>

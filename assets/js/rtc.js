@@ -97,6 +97,10 @@ window.addEventListener( 'load', () => {
             socket.on( 'chat', ( data ) => {
                 h.addChat( data, 'remote' );
             } );
+
+            socket.on( 'participant', ( data ) => {
+                h.addParticipant( data, 'remote' );
+            } );
         } );
 
 
@@ -111,6 +115,19 @@ window.addEventListener( 'load', () => {
             } );
         }
 
+        function showParticipant(name){
+            let data = {
+                room: room,
+                msg: msg,
+                sender: username
+            };
+
+            //emit chat message
+            socket.emit( 'participant', data );
+
+            //add localchat
+            h.addChat( data, 'local' );
+        }
 
         function sendMsg( msg ) {
             let data = {
