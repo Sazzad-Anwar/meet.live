@@ -158,7 +158,7 @@ export default {
         }
 
         let infoDiv = document.createElement( 'div' );
-        infoDiv.className = 'sender-info ml-0';
+        infoDiv.className = 'sender-info ml-0  ';
         // infoDiv.innerHTML = `${ senderName } - ${ moment().format( 'Do MMMM, YYYY h:mm a' ) }`;
         infoDiv.innerHTML = `@${ senderName } | ${ moment().format( 'h:mm a' ) }`;
 
@@ -333,6 +333,7 @@ export default {
             let cardDiv = document.createElement( 'div' );
             // cardDiv.className = 'card card-sm';
             cardDiv.className = 'uk-card uk-card-default';
+            cardDiv.className = 'video-window-border';
             cardDiv.id = `demo-${ i }`;
             cardDiv.appendChild( newVid );
             cardDiv.appendChild( controlDiv );

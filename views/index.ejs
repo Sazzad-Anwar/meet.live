@@ -39,7 +39,7 @@
 </head>
 
 <body class="uk-height-viewport">
-    <div class="" id="main-body">
+    <div class="uk-height-viewport" id="main-body">
         <div class="custom-modal" id='recording-options-modal'>
             <div class="custom-modal-content">
                 <div class="row text-center">
@@ -92,13 +92,13 @@
 
 
         <nav class="uk-navbar-container uk-position-top room-comm" hidden uk-navbar id="nav"
-            style="background: transparent;">
+            style="background:transparent">
             <div class="uk-navbar-left mt-2">
-                <a href="/" class="text-white font-family uk-box-shadow-hover-xlarge ml-5 h3"
-                    style="text-decoration: none;margin-top: -3vh;">Royex.live</a>
+                <a href="/" class="text-white font-family uk-box-shadow-hover-xlarge ml-5 h1"
+                    style="text-decoration: none;margin-top: 1vh;"><img src="../assets/img/logo.png" alt="" srcset=""></a>
             </div>
             <div class="uk-navbar-right uk-visible@m">
-                <ul class="uk-navbar-nav mt-2">
+                <ul class="uk-navbar-nav mt-2" style="max-height:7vh">
                     <%- include('./navbar')  %>
                 </ul>
             </div>
@@ -126,14 +126,14 @@
             <div id="room-create" hidden>
                 <div class="uk-container uk-container-small">
                     <div class="uk-margin-large-top">
-                        <h1 class="uk-text-center uk-hidden@m" style="color:#fff;font-size: 4rem;">Royex.live</h1>
-                        <h1 class="uk-text-center royex-title uk-visible@m">Royex.live</h1>
+                        <h1 class="uk-text-center uk-hidden@m" style="color:#fff;font-size: 4rem;">royex.live</h1>
+                        <h1 class="uk-text-center royex-title uk-visible@m">royex.live</h1>
                     </div>
-                    <br><br>
+                    <br>
                 </div>
                 <div class="uk-child-width-1-2@m uk-child-width-1-1@s uk-grid uk-grid-match" uk-grid>
                     <div>
-                        <div class="uk-card border uk-padding white-background uk-border-rounded">
+                        <div class="uk-card border uk-responsive-height uk-padding white-background uk-border-rounded">
                             <h1 class="uk-text-center mb-5">Start New <strong><span style="color: #2376BC;">Meeting</span> </strong></h1>
 
                             <div class="uk-margin">
@@ -169,7 +169,7 @@
                                 </div>
                             </div>
                             <div class="uk-margin uk-text-center">
-                                <div class="uk-child-width-1-2">
+                                <div class="uk-child-width-1-2@m uk-child-width-1-1@s">
                                     <button
                                         class="uk-button font-family uk-text-bold px-5 py-2 uk-text-center uk-border-rounded uk-box-shadow-hover-xlarge"
                                         style="background-color:#622C80;color:#fff" id='create-room'>Start</button>
@@ -210,7 +210,7 @@
                             </div>
                             <div class="uk-margin uk-hidden" id="url">
                                 <div class="uk-inline uk-width-1-1">
-                                    <img src="../assets/img/mn.png" alt="input-img">
+                                    <span class="uk-form-icon form-icon"><img src="../assets/img/mn.png" alt="input-img"></span>
                                     <input class="uk-input py-4" id="room-join-url"
                                         placeholder="Please input the Meeting URL" type="text">
                                 </div>
@@ -221,7 +221,7 @@
                             </div>
                             <div id="button-break"><br><br></div>
                             <div class="uk-margin uk-text-center">
-                                <div class="uk-child-width-1-2">
+                                <div class="uk-child-width-1-2@m uk-child-width-1-1@s">
                                     <button id="join-room"
                                         class="uk-button font-family uk-text-bold px-5 py-2 uk-text-center uk-border-rounded uk-box-shadow-hover-xlarge"
                                         style="background-color:#2376BC;color:#fff">Join</button>
@@ -236,8 +236,8 @@
             <div id="room-creation" class="uk-hidden">
                 <div class="uk-container uk-container-small">
                     <div class="uk-margin-large-top">
-                        <h1 class="uk-text-center uk-hidden@m" style="color:#fff;font-size: 4rem;">Royex.live</h1>
-                        <h1 class="uk-text-center royex-title uk-visible@m">Royex.live</h1>
+                        <h1 class="uk-text-center uk-hidden@m" style="color:#fff;font-size: 4rem;">royex.live</h1>
+                        <h1 class="uk-text-center royex-title uk-visible@m">royex.live</h1>
                     </div>
                     <br><br>
                 </div>
@@ -331,17 +331,30 @@
             </div>
         </div>
 
+        <!-- <div class="container-fluid room-comm" hidden>
+            <div class="row">
+                <video class="local-video mirror-mode" id='local' volume='0' autoplay muted></video>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-12 main" id='main-section'>                    
+                    <div class="row mt-2 mb-2" id='videos'></div>
+                </div>
+            </div>
+        </div> -->
+
         <!-- video window appearing settings -->
+        
         <div class="room-comm" id="main-section" style="margin-top: 10vh;background-color: #000;min-height: 84vh;min-width: 85vw;" hidden>
-            <div class="uk-child-width-1-4@m uk-child-width-1-2 pt-3 uk-child-width-1-4@l uk-child-width-1-4@xl uk-grid-collapse mx-3" id='videos' uk-grid>
-                <div style="border: 3px solid #622C80">
+            <div class=" pt-3 uk-grid-collapse mx-3" id='videos' uk-grid>
+                <div class="card" style="border: 2px solid #622C80">
                     <video class="mirror-mode" id='local' volume='0' autoplay muted></video>
                 </div>
             </div>
         
         
             <!-- chat settings -->
-            <div class="row">
+            <div class="row uk-visible@m">
                 <div class="uk-width-1-5 chat-col d-print-none mb-2 mt-3 border white-background p-0" id='chat-pane'>
                     <div class="row uk-hidden" id="participant">
                         <div class="col-12 uk-text-left h2 mb-3 p-2 pl-5 uk-text-large text-font" style="background: #622C80;color: #fff;">Participents</div>
@@ -352,26 +365,24 @@
 
                     <div class="row" id='chat-messages'></div>
                     <div class="row">
-                        <textarea id='chat-input' style="border-left:none;border-right: none;" class="uk-textarea rounded-0 pb-0 chat-box text-font border-info" rows='3'
+                        <textarea id='chat-input' style="border-left:none;border-right: none;bottom:50px" class="uk-textarea rounded-0 pb-0 chat-box text-font border-info" rows='3'
                             placeholder="Type here & press enter to send"></textarea>
                     </div>
                 </div>
             </div>
         </div>
         
-        <br>
-    </div>
-
-    <!-- footer -->
-    <div class="uk-visible@m uk-position-bottom" style="background-color: #161616;">
-        <div class="uk-container uk-container-xlarge uk-text-right">
-            <div class="uk-inline py-3">
-                <h5 class="mb-1 text-font" style="color: #fff;">Developed by Royex Technologies</h5>
+        <div class="uk-hidden@m" style="background-color: #161616;">
+            <div class="uk-container  uk-container-xlarge uk-text-center">
+                <div class="uk-inline py-3">
+                    <h5 class="mb-1 text-font" style="color: #fff;">Developed by Royex Technologies</h5>
+                </div>
             </div>
         </div>
     </div>
-    <div class="uk-hidden@m" style="background-color: #161616;">
-        <div class="uk-container uk-container-xlarge uk-text-center">
+    <!-- footer -->
+    <div class="uk-visible@m uk-position-bottom" style="background-color: #161616;">
+        <div class="uk-container uk-container-xlarge uk-text-right">
             <div class="uk-inline py-3">
                 <h5 class="mb-1 text-font" style="color: #fff;">Developed by Royex Technologies</h5>
             </div>
@@ -383,9 +394,10 @@
         function copyClipBoard(element) {
             var $temp = $("<input>");
             $("body").append($temp);
-            $temp.val($(element).text()).select();
+            $temp.val($(element).val()).select();
             document.execCommand("copy");
             $temp.remove();
+            console.log($('#room-created').val());
         }
 
         //when clicked on Start now button
@@ -438,6 +450,12 @@
                     $('#alert-username').removeClass('uk-hidden')
                 }
             });
+            // console.log($('#videos').children().length);
+            // if($('#videos').children().length == 1){
+            //     $('#videos').addClass('uk-child-width-1-2@xl')
+            // }else if($('#videos').children().length == 3){
+            //     $('#videos').addClass(`uk-child-width-1-4@xl`)
+            // }
         });
     </script>
 </body>

@@ -1,14 +1,14 @@
 .chat-col{
     right: -100vw;
-    bottom: 51px;
+    bottom: 0px;
     /* z-index: 1000; */
     position: fixed;
     color: #000;
-    padding-right: 5px;
+    /* padding-right: 5px;
     padding-left: 5px;
     padding-bottom: 40px;
-    padding-top: 15px;
-    min-height: 84vh;
+    padding-top: 15px; */
+    min-height: 89vh;
     width: 16% !important;
     
 }
@@ -23,7 +23,7 @@
 }
 
 #chat-messages{
-    max-height: 65vh;
+    max-height: 70vh;
     /* margin-bottom: 20px; */
     overflow-x: hidden;
     overflow-y: auto;
@@ -68,8 +68,10 @@
 .main{
     padding-top: 40px;
 }
-
-
+/* 
+video{
+    max-height: 32vh !important;
+} */
 /* .remote-video{
     width:100%;
     height:auto;
@@ -122,9 +124,8 @@
 
 .msg{
     font-weight: 400;
-    font-size: 12px;
     color: black;
-    background-color: wheat;
+    padding: 4px 13px !important
 }
 
 
@@ -284,10 +285,19 @@ body{
 }
 
 .chat-bg{
-    background-color: #b2aaaa;
+    background-color: #E6E6E6;
+    font-family: 'Ubuntu', sans-serif;
 }
 
 .form-icon{
     margin-left: 6px !important;
     width: auto !important;
+}
+
+.min-width-logo{
+    min-width: auto;
+}
+
+.video-window-border{
+    border:2px solid #2376BC !important;
 }
