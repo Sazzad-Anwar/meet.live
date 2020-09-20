@@ -60,7 +60,7 @@ db.db.getConnection(err => {
   }
 });
 
-  //creating Meeting tables if not exists
+  // creating Meeting tables if not exists
   let createTableMeeting = `CREATE TABLE IF NOT EXISTS meeting(
   id int PRIMARY KEY AUTO_INCREMENT,
   meeting_id TEXT NOT NULL,
@@ -68,7 +68,7 @@ db.db.getConnection(err => {
   room_master_name TEXT NOT NULL,
   room_master_email TEXT NOT NULL,
   status TEXT NOT NULL,
-  room_creation_time TIMESTAMP NOT NULL,
+  room_creation_time TEXT NOT NULL,
   meeting_closing_time TEXT NOT NULL
   )`
   let createTableQuery = db.db.query(createTableMeeting, (err, done) => {
@@ -83,7 +83,7 @@ db.db.getConnection(err => {
   email TEXT NULL,
   status TEXT NOT NULL,
   Ip_address TEXT NOT NULL,
-  meeting_joining_time TIMESTAMP NOT NULL
+  meeting_joining_time TEXT NOT NULL
   )`
   let createParticipantsQuery = db.db.query(createTableParticipants, (err, done) => {
     if (err) throw err;
@@ -116,6 +116,7 @@ let passQuery = db.db.query('SELECT * FROM vault',(err,vault)=>{
     });
   }
 });
+
 
 //royex video app main page
 app.get('/', (req, res) => {

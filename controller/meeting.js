@@ -20,17 +20,17 @@ exports.meeting = async(req,res)=>{
 exports.room_create = async(req,res)=>{
     try {
         const {meeting_id,meeting_name,room_master_name,room_master_email}= req.body;
+        const date = new Date();
 
-        let sql = 'INSERT INTO meeting (meeting_id,meeting_name,room_master_name,room_master_email,status) VALUES(?,?,?,?,?)'
-        let query = await db.db.query(sql,[meeting_id,meeting_name,room_master_name,room_master_email,'open'],(err,done)=>{
+        let sql = 'INSERT INTO meeting (meeting_id,meeting_name,room_master_name,room_master_email,status,room_creation_time) VALUES(?,?,?,?,?,?)'
+        let query = await db.db.query(sql,[meeting_id,meeting_name,room_master_name,room_master_email,'open',date],(err,done)=>{
             if(err) throw err;
 
             let ip = req.connection.remoteAddress;
 
-            let sql ="INSERT INTO participants (participant_name,room_id,ip_address,status) VALUES(?,?,?,?)";
-            let query = db.db.query(sql,[room_master_name,meeting_id,ip,'joined'],(err,done)=>{
+            let sql ="INSERT INTO participants (participant_name,room_id,ip_address,status,meeting_joining_time) VALUES(?,?,?,?,?)";
+            let query = db.db.query(sql,[room_master_name,meeting_id,ip,'joined',date],(err,done)=>{
                 if(err) throw err;
-                console.log(req.connection.remoteAddress);
                 res.status(200).json({isSuccess:true,code:200,msg:'success'});
             });
         });
@@ -45,6 +45,7 @@ exports.participant_join = async (req,res)=>{
     try {
         const {name,meeting_id} = req.body;
         let ip = req.connection.remoteAddress;
+        const date = new Date();
 
         let sql = "SELECT * FROM participants WHERE participant_name=? and ip_address=? and room_id=?";
         let query = db.db.query(sql,[name,ip,meeting_id],(err,found)=>{
@@ -57,10 +58,9 @@ exports.participant_join = async (req,res)=>{
                     res.status(200).json({isSuccess:true,code:200,msg:'success'});
                 });
             }else{
-                let sql ="INSERT INTO participants (participant_name,room_id,ip_address,status) VALUES(?,?,?,?)";
-                let query = db.db.query(sql,[name,meeting_id,ip,'joined'],(err,done)=>{
+                let sql ="INSERT INTO participants (participant_name,room_id,ip_address,status,meeting_joining_time) VALUES(?,?,?,?,?)";
+                let query = db.db.query(sql,[name,meeting_id,ip,'joined',date],(err,done)=>{
                     if(err) throw err;
-                    console.log(req.connection.remoteAddress);
                     res.status(200).json({isSuccess:true,code:200,msg:'success'});
                 });
             }
@@ -83,15 +83,15 @@ exports.leave = async(req,res)=>{
         let query = db.db.query(sql,[session_name,room_id],(err,found)=>{
             if(err) throw err;
             if(found.length !== 0){
-                let sql = "UPDATE meeting SET meeting_closing_time=?, status=?";
-                let query = db.db.query(sql,[currentTime,'closed'],(err,updated)=>{
+                let sql = "UPDATE meeting SET meeting_closing_time=?, status=? WHERE meeting_id=?";
+                let query = db.db.query(sql,[currentTime,'closed',room_id],(err,updated)=>{
                     if(err) throw err;
                     console.log(updated);
                     res.status(200).json({isSuccess:true,code:200,msg:'success'})
                 });
             }else{
-                let sql = "UPDATE participants SET status=? WHERE participant_name =?";
-                let query = db.db.query(sql,['left',session_name],(err,updated)=>{
+                let sql = "UPDATE participants SET status=? WHERE participant_name =? and room_id=?";
+                let query = db.db.query(sql,['left',session_name,room_id],(err,updated)=>{
                     if(err) throw err;
                     console.log(updated);
                     res.status(200).json({isSuccess:true,code:200,msg:'success'})

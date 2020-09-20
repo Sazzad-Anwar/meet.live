@@ -8,4 +8,4 @@ const { json } = require('express');
 
 // console.log(`this is hash ${hash}`);
 
-fetch(`${url}participant/update/${room_id}/${username}/${partnerName}`,{method:'post',headers:{'Content-Type': 'application/json'}}).then(res=> res.json()).then(json=> console.log(json))
+const date = new Date();
