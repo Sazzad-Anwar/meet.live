@@ -13,7 +13,7 @@ window.addEventListener('load', () => {
 
         for (let i = 0; i < commElem.length; i++) {
             commElem[i].attributes.removeNamedItem('hidden');
-        }
+    }
 
         var pc = [];
 
@@ -27,7 +27,6 @@ window.addEventListener('load', () => {
 
         //Get user video by default
         getAndSetUserStream();
-
 
         socket.on('connect', () => {
             //set socketId
@@ -100,20 +99,28 @@ window.addEventListener('load', () => {
             });
 
             socket.on('participant', (data) => {
-                h.addParticipent(data, 'remote');
-                console.log(data);
+                h.participent(data, 'remote');
             });
         });
-
+    
         function getAndSetUserStream() {
             h.getUserFullMedia().then((stream) => {
                 //save my stream
                 myStream = stream;
-
                 h.setLocalStream(stream);
             }).catch((e) => {
                 console.error(`stream error: ${ e }`);
             });
+        }
+
+        function participentName(username){
+            let senderData = {
+                room: room,
+                sender: username,
+                socketId:socketId
+            };
+            socket.emit('participant',senderData);
+            h.participent(senderData, 'local');
         }
 
         function sendMsg(msg) {
@@ -147,18 +154,14 @@ window.addEventListener('load', () => {
                 h.getUserFullMedia().then((stream) => {
                     //save my stream
                     myStream = stream;
-
                     stream.getTracks().forEach((track) => {
                         pc[partnerName].addTrack(track, stream); //should trigger negotiationneeded event
                     });
-
                     h.setLocalStream(stream);
                 }).catch((e) => {
                     console.error(`stream error: ${ e }`);
                 });
             }
-
-
 
             //create offer
             if (createOffer) {
@@ -202,20 +205,70 @@ window.addEventListener('load', () => {
                     newVid.srcObject = str;
                     newVid.autoplay = true;
                     newVid.className = 'remote-video';
+                    participentName(username,partnerName)
 
-                    // socket.emit( 'participant', data );
-                    // var name =user().sender;
-                    // console.log(user());
+                    if ($('#mute-video').val() === '1') {
+                        h.getUserFullMedia().then((stream) => {
+                            //save my stream
+                            myStream = stream;
+                            // $('#toggle-video').click()
+
+                            let elem = document.getElementById('toggle-video');
+                            elem.classList.remove('pt-3')
+                            elem.classList.add('pt-2')
+                            elem.setAttribute('src', '../assets/img/close-video.png')
+                            elem.setAttribute('uk-tooltip', 'title:Camera is off; pos:bottom')
+                            myStream.getVideoTracks()[0].enabled = false;
+                            broadcastNewTracks(myStream, 'video', true);
+
+                        }).catch((e) => {
+                            console.error(`stream error: ${ e }`);
+                        });
+                    }
+                    if ($('#mute-audio').val() === '1') {
+                        h.getUserFullMedia().then((stream) => {
+                            //save my stream
+                            myStream = stream;
+                            let elem = document.getElementById('toggle-mute');
+                            elem.setAttribute('src', '../assets/img/close-mute.png')
+                            elem.setAttribute('uk-tooltip', 'title:Voice is muted; pos:bottom')
+
+                            myStream.getAudioTracks()[0].enabled = false;
+                            
+                            broadcastNewTracks(myStream, 'audio');
+                        }).catch((e) => {
+                            console.error(`stream error: ${ e }`);
+                        });
+                    }
+                    let link = location.href.split('?')
+                    let room = link[1].split('=');
+                    let room_id = room[1];
+                    let url = link[0];
+                    // let controlDiv = document.createElement('div');
+
+                    // fetch(`${url}meeting/participant/id/${room_id}`,{method:'get',headers:{'Content-Type': 'application/json'}}).then(res=> res.json()).then(json=>{
+                    //     console.log(partnerName);
+                    //     json.map(ele=>{
+                    //         if(ele.participant_id === partnerName && ele.participant_name !== username){
+                    //             controlDiv.className = 'remote-video-controls';
+                    //             controlDiv.innerHTML = `<span class='text-white pr-3 h3'>${ele.participant_name}</span> <img src="./assets/img/mike.png" id='toggle-mute' class="pr-3 fa-microphone mute-remote-mic microphone" uk-tooltip="title:Voice is audiable;pos:bottom">
+                    //             <img src="./assets/img/Desktop.png" class="fa-expand expand-remote-video white_text" uk-tooltip="title:view full screen;pos:bottom">`;
+                    //         }
+                    //     })
+                    // })
 
                     //video controls elements
                     let controlDiv = document.createElement('div');
                     controlDiv.className = 'remote-video-controls';
-                    controlDiv.innerHTML = `<span class='text-white pr-3'>${name}</span> <i class="fa fa-microphone text-white pr-3 mute-remote-mic" title="Mute"></i>
-                        <i class="fa fa-expand text-white expand-remote-video" title="Expand"></i>`;
+                    controlDiv.innerHTML = `<span class='text-white pr-3 h3' id="${partnerName}-name"></span><img src="./assets/img/mike.png" id='toggle-mute' class="pr-3 fa-microphone mute-remote-mic microphone" uk-tooltip="title:Voice is audiable;pos:bottom">
+                    <img src="./assets/img/Desktop.png" class="fa-expand expand-remote-video white_text" uk-tooltip="title:view full screen;pos:bottom">`;
+
+                    
+                    // fetch(`${url}meeting/participant/update/${room_id}/${username}/${partnerName}`,{method:'post',headers:{'Content-Type': 'application/json'}})
 
                     //create a new div for card
                     let cardDiv = document.createElement('div');
-                    // cardDiv.className = 'card card-sm';
+                    cardDiv.className = 'card card-sm';
                     cardDiv.className = 'uk-card uk-card-default card';
                     cardDiv.id = partnerName;
                     cardDiv.appendChild(newVid);
@@ -227,7 +280,6 @@ window.addEventListener('load', () => {
                     h.adjustVideoElemSize();
                 }
             };
-
 
 
             pc[partnerName].onconnectionstatechange = (d) => {
@@ -255,31 +307,28 @@ window.addEventListener('load', () => {
             };
         }
 
-
-
         function shareScreen() {
-            h.shareScreen().then((stream) => {
-                h.toggleShareIcons(true);
+            h.shareScreen().then( ( stream ) => {
+                h.toggleShareIcons( true );
 
                 //disable the video toggle btns while sharing screen. This is to ensure clicking on the btn does not interfere with the screen sharing
                 //It will be enabled was user stopped sharing screen
-                h.toggleVideoBtnDisabled(true);
+                h.toggleVideoBtnDisabled( true );
 
                 //save my screen stream
                 screen = stream;
 
                 //share the new stream with all partners
-                broadcastNewTracks(stream, 'video', false);
+                broadcastNewTracks( stream, 'video', false );
 
                 //When the stop sharing button shown by the browser is clicked
-                screen.getVideoTracks()[0].addEventListener('ended', () => {
+                screen.getVideoTracks()[0].addEventListener( 'ended', () => {
                     stopSharingScreen();
-                });
-            }).catch((e) => {
-                console.error(e);
-            });
+                } );
+            } ).catch( ( e ) => {
+                console.error( e );
+            } );
         }
-
 
 
         function stopSharingScreen() {
@@ -299,8 +348,8 @@ window.addEventListener('load', () => {
         }
 
 
-
         function broadcastNewTracks(stream, type, mirrorMode = true) {
+            
             h.setLocalStream(stream, mirrorMode);
 
             let track = type == 'audio' ? stream.getAudioTracks()[0] : stream.getVideoTracks()[0];
@@ -371,27 +420,39 @@ window.addEventListener('load', () => {
             }
         });
 
+        //send text message by pressing button
+        document.getElementById('msg-send-btn').addEventListener('click', (e) => {
+            // if (e.which === 13 && (e.target.value.trim())) {
+                e.preventDefault();
+                var chat_msg = document.getElementById('chat-input');
+                sendMsg(chat_msg.value);
+
+                setTimeout(() => {
+                    chat_msg.value = '';
+                }, 50);
+            // }
+        });
 
         //When the video icon is clicked
         document.getElementById('toggle-video').addEventListener('click', (e) => {
             e.preventDefault();
 
             let elem = document.getElementById('toggle-video');
-
             if (myStream.getVideoTracks()[0].enabled) {
-                // e.target.classList.remove( 'fa-video' );
-                // e.target.classList.add( 'fa-video-slash' );
+                elem.classList.remove('pt-3')
+                elem.classList.add('pt-2')
                 e.target.setAttribute('src', '../assets/img/close-video.png')
                 e.target.setAttribute('uk-tooltip', 'title:Camera is off; pos:bottom')
                 myStream.getVideoTracks()[0].enabled = false;
+                
             } else {
-                // e.target.classList.remove( 'fa-video-slash' );
-                // e.target.classList.add( 'fa-video' );
+                elem.classList.remove('pt-2')
+                elem.classList.add('pt-3')
                 e.target.setAttribute('src', '../assets/img/video.png')
                 e.target.setAttribute('uk-tooltip', 'title:Camera is on; pos:bottom')
-                elem.setAttribute('title', 'Hide Video');
-
+                $('#local').removeAttr('poster')
                 myStream.getVideoTracks()[0].enabled = true;
+                localStorage.setItem('video',0)
             }
 
             broadcastNewTracks(myStream, 'video');
@@ -405,17 +466,16 @@ window.addEventListener('load', () => {
             let elem = document.getElementById('toggle-mute');
 
             if (myStream.getAudioTracks()[0].enabled) {
-                e.target.classList.remove('fa-microphone-alt');
-                e.target.classList.add('fa-microphone-alt-slash');
-                elem.setAttribute('title', 'Unmute');
+                e.target.setAttribute('src', '../assets/img/close-mute.png')
+                e.target.setAttribute('uk-tooltip', 'title:Voice is muted; pos:bottom')
 
                 myStream.getAudioTracks()[0].enabled = false;
             } else {
-                e.target.classList.remove('fa-microphone-alt-slash');
-                e.target.classList.add('fa-microphone-alt');
-                elem.setAttribute('title', 'Mute');
+                e.target.setAttribute('src', '../assets/img/mike.png')
+                e.target.setAttribute('uk-tooltip', 'title:Voice is audible; pos:bottom')
 
                 myStream.getAudioTracks()[0].enabled = true;
+                localStorage.setItem('audio',0)
             }
 
             broadcastNewTracks(myStream, 'audio');

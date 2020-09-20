@@ -161,7 +161,6 @@ img,
 video {
   /* 1 */
   max-width: 100%;
-  min-width: 100%;
   /* 2 */
   height: auto;
   /* 3 */

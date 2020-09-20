@@ -123,32 +123,27 @@ export default {
         };
     },
 
-    addParticipent(data,senderType){
-        let user=''
-        if ( senderType === 'remote' ) {
-            senderName = data.sender;
-            user = senderName
-            this.toggleChatNotificationBadge();
-        }else{
-            user= 'You'
+    participent(data,senderType){
+        if(senderType === 'remote'){
+            setTimeout(function(){ 
+                $(`#${data.socketId}-name`).text(data.sender);
+                let ul = document.getElementById('participant')
+                let li = document.createElement('li')
+                li.id = `${data.socketId}-participant`
+                li.classList = 'name_list'
+                let senderName=''
+                ul.appendChild(li)
+                $(`#${data.socketId}-participant`).text(data.sender);
+            }, 1000);
         }
-
-        var participantDiv = document.getElementById('participant')
-
-        let participantName = document.createElement('div')
-        participantName.className = 'sender-info'
-        participantName.innerHTML = user;
-
-        participantDiv.appendChild(participantName)
     },
 
     addChat( data, senderType ) {
         let chatMsgDiv = document.querySelector( '#chat-messages' );
         let contentAlign = 'uk-text-left ml-4 pl-1';
-        let senderName = 'you';
+        let senderName = data.sender;
         let msgBg = 'chat-bg';
         let user=''
-
         if ( senderType === 'remote' ) {
             contentAlign = 'uk-text-left ml-4 pl-1';
             senderName = data.sender;
@@ -165,7 +160,7 @@ export default {
         let colDiv = document.createElement( 'div' );
         colDiv.className = `col-10 card chat-card msg ${ msgBg } p-2`;
         colDiv.innerHTML = xssFilters.inHTMLData( data.msg ).autoLink( { target: "_blank", rel: "nofollow"});
-
+        
         colDiv.style.wordBreak = 'break-all'
         colDiv.style.minWidth = '97%'
 
@@ -215,14 +210,14 @@ export default {
 
         if ( share ) {
             shareIconElem.setAttribute( 'title', 'Stop sharing screen' );
-            shareIconElem.children[0].classList.add( 'text-primary' );
-            shareIconElem.children[0].classList.remove( 'text-white' );
+            // shareIconElem.children[0].classList.add( 'text-primary' );
+            // shareIconElem.children[0].classList.remove( 'text-white' );
         }
 
         else {
             shareIconElem.setAttribute( 'title', 'Share screen' );
-            shareIconElem.children[0].classList.add( 'text-white' );
-            shareIconElem.children[0].classList.remove( 'text-primary' );
+            // shareIconElem.children[0].classList.add( 'text-white' );
+            // shareIconElem.children[0].classList.remove( 'text-primary' );
         }
     },
 
@@ -242,14 +237,15 @@ export default {
     singleStreamToggleMute( e ) {
         if ( e.target.classList.contains( 'fa-microphone' ) ) {
             e.target.parentElement.previousElementSibling.muted = true;
-            e.target.classList.add( 'fa-microphone-slash' );
+            e.target.setAttribute('src', '../assets/img/close-mute.png')
             e.target.classList.remove( 'fa-microphone' );
+            e.target.setAttribute('uk-tooltip', 'title:Voice is muted; pos:bottom')
         }
-
         else {
             e.target.parentElement.previousElementSibling.muted = false;
+            e.target.setAttribute('src', '../assets/img/mike.png')
             e.target.classList.add( 'fa-microphone' );
-            e.target.classList.remove( 'fa-microphone-slash' );
+            e.target.setAttribute('uk-tooltip', 'title:Voice is audible; pos:bottom')
         }
     },
 
@@ -321,13 +317,12 @@ export default {
             newVid.autoplay = true;
             newVid.className = 'remote-video';
 
-            console.log(this.addParticipent());
-
             //video controls elements
             let controlDiv = document.createElement( 'div' );
             controlDiv.className = 'remote-video-controls';
+            controlDiv.className = 'remote-video-controls-top';
             controlDiv.innerHTML = `<i class="fa fa-microphone text-white pr-3 mute-remote-mic" title="Mute"></i>
-                <i class="fa fa-expand text-white expand-remote-video" title="Expand"></i>`;
+            <div uk-icon="icon: desktop; ratio: 2" class="expand-remote-video white_text" uk-tooltip="title:view full screen;pos:bottom"></div>`;
 
             //create a new div for card
             let cardDiv = document.createElement( 'div' );

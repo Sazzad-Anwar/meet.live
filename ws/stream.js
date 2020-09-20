@@ -29,6 +29,10 @@ const stream = ( socket ) => {
     socket.on( 'chat', ( data ) => {
         socket.to( data.room ).emit( 'chat', { sender: data.sender, msg: data.msg } );
     } );
+
+    socket.on( 'participant', ( data ) => {
+        socket.to( data.room ).emit( 'participant', { sender: data.sender, socketId:data.socketId } );
+    } );
 };
 
 module.exports = stream;
