@@ -138,6 +138,12 @@ export default {
         }
     },
 
+    deleteName( elemId ) {
+        if ( document.getElementById( `${elemId}-participant` ) ) {
+            document.getElementById( `${elemId}-participant` ).remove();
+        }
+    },
+
     addChat( data, senderType ) {
         let chatMsgDiv = document.querySelector( '#chat-messages' );
         let contentAlign = 'uk-text-left ml-4 pl-1';

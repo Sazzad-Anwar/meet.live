@@ -201,10 +201,13 @@ window.addEventListener('load', () => {
                 } else {
                     //video elem
                     let newVid = document.createElement('video');
+                    // let newImg = document.createElement('img');
                     newVid.id = `${ partnerName }-video`;
+                    // newImg.id = `${ partnerName }-image`;
                     newVid.srcObject = str;
                     newVid.autoplay = true;
                     newVid.className = 'remote-video';
+                    // newImg.className = 'remote-video uk-hidden';
                     participentName(username,partnerName)
 
                     if ($('#mute-video').val() === '1') {
@@ -244,18 +247,6 @@ window.addEventListener('load', () => {
                     let room = link[1].split('=');
                     let room_id = room[1];
                     let url = link[0];
-                    // let controlDiv = document.createElement('div');
-
-                    // fetch(`${url}meeting/participant/id/${room_id}`,{method:'get',headers:{'Content-Type': 'application/json'}}).then(res=> res.json()).then(json=>{
-                    //     console.log(partnerName);
-                    //     json.map(ele=>{
-                    //         if(ele.participant_id === partnerName && ele.participant_name !== username){
-                    //             controlDiv.className = 'remote-video-controls';
-                    //             controlDiv.innerHTML = `<span class='text-white pr-3 h3'>${ele.participant_name}</span> <img src="./assets/img/mike.png" id='toggle-mute' class="pr-3 fa-microphone mute-remote-mic microphone" uk-tooltip="title:Voice is audiable;pos:bottom">
-                    //             <img src="./assets/img/Desktop.png" class="fa-expand expand-remote-video white_text" uk-tooltip="title:view full screen;pos:bottom">`;
-                    //         }
-                    //     })
-                    // })
 
                     //video controls elements
                     let controlDiv = document.createElement('div');
@@ -264,13 +255,12 @@ window.addEventListener('load', () => {
                     <img src="./assets/img/Desktop.png" class="fa-expand expand-remote-video white_text" uk-tooltip="title:view full screen;pos:bottom">`;
 
                     
-                    // fetch(`${url}meeting/participant/update/${room_id}/${username}/${partnerName}`,{method:'post',headers:{'Content-Type': 'application/json'}})
-
                     //create a new div for card
                     let cardDiv = document.createElement('div');
                     cardDiv.className = 'card card-sm';
                     cardDiv.className = 'uk-card uk-card-default card';
                     cardDiv.id = partnerName;
+                    // cardDiv.appendChild(newImg);
                     cardDiv.appendChild(newVid);
                     cardDiv.appendChild(controlDiv);
 
@@ -287,10 +277,12 @@ window.addEventListener('load', () => {
                     case 'disconnected':
                     case 'failed':
                         h.closeVideo(partnerName);
+                        h.deleteName(partnerName);
                         break;
 
                     case 'closed':
                         h.closeVideo(partnerName);
+                        h.deleteName(partnerName);
                         break;
                 }
             };
@@ -302,6 +294,7 @@ window.addEventListener('load', () => {
                     case 'closed':
                         console.log("Signalling state is 'closed'");
                         h.closeVideo(partnerName);
+                        h.deleteName(partnerName);
                         break;
                 }
             };
@@ -444,6 +437,7 @@ window.addEventListener('load', () => {
                 e.target.setAttribute('src', '../assets/img/close-video.png')
                 e.target.setAttribute('uk-tooltip', 'title:Camera is off; pos:bottom')
                 myStream.getVideoTracks()[0].enabled = false;
+                console.log(pc[partnerName]);
                 
             } else {
                 elem.classList.remove('pt-2')
