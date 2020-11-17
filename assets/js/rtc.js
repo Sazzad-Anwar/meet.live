@@ -4,6 +4,7 @@ window.addEventListener('load', () => {
     const room = h.getQString(location.href, 'room');
     const username = sessionStorage.getItem('username');
 
+
     if (!room) {
         document.querySelector('#room-create').attributes.removeNamedItem('hidden');
     } else if (!username) {
@@ -24,6 +25,7 @@ window.addEventListener('load', () => {
         var screen = '';
         var recordedStream = [];
         var mediaRecorder = '';
+
 
         //Get user video by default
         getAndSetUserStream();
@@ -93,9 +95,12 @@ window.addEventListener('load', () => {
                 }
             });
 
-
             socket.on('chat', (data) => {
                 h.addChat(data, 'remote');
+            });
+
+            socket.on('muteVideo', (data) => {
+                h.showImageOnMuteVideo(data, 'remote');
             });
 
             socket.on('participant', (data) => {
@@ -120,7 +125,7 @@ window.addEventListener('load', () => {
                 socketId:socketId
             };
             socket.emit('participant',senderData);
-            h.participent(senderData, 'local');
+            // h.participent(senderData, 'local');
         }
 
         function sendMsg(msg) {
@@ -137,6 +142,34 @@ window.addEventListener('load', () => {
             h.addChat(data, 'local');
         }
 
+        function videoMute(muted){
+            if(muted){
+                const data={
+                    room: room,
+                    socketId: socketId,
+                    sender: username,
+                    status:1
+                }
+                socket.on('muteVideo', (data) => {
+                    console.log(data);
+                    h.showImageOnMuteVideo(data);
+                });
+                h.showImageOnMuteVideo(data, 'local')
+                socket.emit('muteVideo', data)
+            }else{
+                const data={
+                    room: room,
+                    socketId: socketId,
+                    sender: username,
+                    status:0
+                }
+                socket.on('muteVideo', (data) => {
+                    h.showImageOnMuteVideo(data);
+                });
+                h.showImageOnMuteVideo(data)
+                socket.emit('muteVideo', data)
+            }
+        }
 
 
         function init(createOffer, partnerName) {
@@ -191,8 +224,6 @@ window.addEventListener('load', () => {
                 });
             };
 
-
-
             //add
             pc[partnerName].ontrack = (e) => {
                 let str = e.streams[0];
@@ -201,26 +232,27 @@ window.addEventListener('load', () => {
                 } else {
                     //video elem
                     let newVid = document.createElement('video');
-                    // let newImg = document.createElement('img');
                     newVid.id = `${ partnerName }-video`;
-                    // newImg.id = `${ partnerName }-image`;
                     newVid.srcObject = str;
                     newVid.autoplay = true;
                     newVid.className = 'remote-video';
-                    // newImg.className = 'remote-video uk-hidden';
                     participentName(username,partnerName)
-
+                    
                     if ($('#mute-video').val() === '1') {
+                        videoMute(true)
+
+                        localStorage.setItem(partnerName,1)
+
                         h.getUserFullMedia().then((stream) => {
                             //save my stream
                             myStream = stream;
-                            // $('#toggle-video').click()
-
                             let elem = document.getElementById('toggle-video');
                             elem.classList.remove('pt-3')
                             elem.classList.add('pt-2')
                             elem.setAttribute('src', '../assets/img/close-video.png')
                             elem.setAttribute('uk-tooltip', 'title:Camera is off; pos:bottom')
+                            document.getElementById('local').classList.add('uk-hidden');
+                            document.getElementById('local-image').classList.remove('uk-hidden');
                             myStream.getVideoTracks()[0].enabled = false;
                             broadcastNewTracks(myStream, 'video', true);
 
@@ -239,30 +271,52 @@ window.addEventListener('load', () => {
                             myStream.getAudioTracks()[0].enabled = false;
                             
                             broadcastNewTracks(myStream, 'audio');
+
                         }).catch((e) => {
                             console.error(`stream error: ${ e }`);
                         });
                     }
-                    let link = location.href.split('?')
-                    let room = link[1].split('=');
-                    let room_id = room[1];
-                    let url = link[0];
+
+                    
+                    // if (id === 1 ) {
+                    //     $(`#${partnerName}-image`).removeClass('uk-hidden');
+                    //     $(`#${partnerName}-mutename`).text(partnerName);
+                    //     $(`#${partnerName}-video`).addClass('uk-hidden');
+                    //     $(`#${partnerName}-video > .remote-video-controls`).addClass('uk-hidden')
+                        
+                    // }else{
+                    //     $(`#${partnerName}-image`).addClass('uk-hidden');
+                    //     $(`#${partnerName}-video`).removeClass('uk-hidden');
+                    //     $(`#${partnerName}-video > .remote-video-controls`).removeClass('uk-hidden')
+                        
+                    // }
 
                     //video controls elements
                     let controlDiv = document.createElement('div');
                     controlDiv.className = 'remote-video-controls';
-                    controlDiv.innerHTML = `<span class='text-white pr-3 h3' id="${partnerName}-name"></span><img src="./assets/img/mike.png" id='toggle-mute' class="pr-3 fa-microphone mute-remote-mic microphone" uk-tooltip="title:Voice is audiable;pos:bottom">
-                    <img src="./assets/img/Desktop.png" class="fa-expand expand-remote-video white_text" uk-tooltip="title:view full screen;pos:bottom">`;
+                    controlDiv.innerHTML = `<span class='text-white pr-3 h5' id="${partnerName}-name"></span><img src="./assets/img/mike.png" id='toggle-mute' style="height:20px" class="pr-3 pointer fa-microphone mute-remote-mic microphone" uk-tooltip="title:Mute voice;pos:bottom">
+                    <img src="./assets/img/Desktop.png" class="fa-expand expand-remote-video white_text" uk-tooltip="title:view full screen;pos:bottom" style="height:20px">`;
 
-                    
+
+                    let image = document.createElement(`div`)
+                    image.className ='mute-image uk-hidden';
+                    image.id =`${partnerName}-image`;
+                    image.innerHTML = `<img src='https://picsum.photos/950/711' class="image" style="filter:brightness(0.5);" >`
+
+                    let name = document.createElement(`div`)
+                    name.id = `${partnerName}-name`
+                    name.className = 'center'
+                    name.innerHTML = `<span class='pr-3 h5' id="${partnerName}-mutename">${partnerName}</span> <img src="./assets/img/mike.png" id='toggle-mute' style="height:23px" class="pr-3 fa-microphone mute-remote-mic pointer microphone" uk-tooltip="title:Mute voice;pos:bottom"> <img src="../assets/img/close-video.png" style="height:23px">`
+                    image.appendChild(name)
+
                     //create a new div for card
                     let cardDiv = document.createElement('div');
                     cardDiv.className = 'card card-sm';
                     cardDiv.className = 'uk-card uk-card-default card';
                     cardDiv.id = partnerName;
-                    // cardDiv.appendChild(newImg);
                     cardDiv.appendChild(newVid);
                     cardDiv.appendChild(controlDiv);
+                    cardDiv.appendChild(image);
 
                     //put div in main-section elem
                     document.getElementById('videos').appendChild(cardDiv);
@@ -277,12 +331,12 @@ window.addEventListener('load', () => {
                     case 'disconnected':
                     case 'failed':
                         h.closeVideo(partnerName);
-                        h.deleteName(partnerName);
+                        h.removeParticipant(partnerName)
                         break;
 
                     case 'closed':
                         h.closeVideo(partnerName);
-                        h.deleteName(partnerName);
+                        h.removeParticipant(partnerName)
                         break;
                 }
             };
@@ -294,7 +348,7 @@ window.addEventListener('load', () => {
                     case 'closed':
                         console.log("Signalling state is 'closed'");
                         h.closeVideo(partnerName);
-                        h.deleteName(partnerName);
+                        h.removeParticipant(partnerName)
                         break;
                 }
             };
@@ -418,7 +472,11 @@ window.addEventListener('load', () => {
             // if (e.which === 13 && (e.target.value.trim())) {
                 e.preventDefault();
                 var chat_msg = document.getElementById('chat-input');
-                sendMsg(chat_msg.value);
+                if(chat_msg.value === '' || chat_msg.value === null){
+                    return null;
+                }else{
+                    sendMsg(chat_msg.value);
+                }
 
                 setTimeout(() => {
                     chat_msg.value = '';
@@ -429,15 +487,18 @@ window.addEventListener('load', () => {
         //When the video icon is clicked
         document.getElementById('toggle-video').addEventListener('click', (e) => {
             e.preventDefault();
-
+            
+            
             let elem = document.getElementById('toggle-video');
             if (myStream.getVideoTracks()[0].enabled) {
                 elem.classList.remove('pt-3')
                 elem.classList.add('pt-2')
                 e.target.setAttribute('src', '../assets/img/close-video.png')
                 e.target.setAttribute('uk-tooltip', 'title:Camera is off; pos:bottom')
+                document.getElementById('local').classList.add('uk-hidden');
+                document.getElementById('local-image').classList.remove('uk-hidden');
                 myStream.getVideoTracks()[0].enabled = false;
-                console.log(pc[partnerName]);
+                videoMute(true)
                 
             } else {
                 elem.classList.remove('pt-2')
@@ -445,13 +506,15 @@ window.addEventListener('load', () => {
                 e.target.setAttribute('src', '../assets/img/video.png')
                 e.target.setAttribute('uk-tooltip', 'title:Camera is on; pos:bottom')
                 $('#local').removeAttr('poster')
+                document.getElementById('local').classList.remove('uk-hidden');
+                document.getElementById('local-image').classList.add('uk-hidden');
                 myStream.getVideoTracks()[0].enabled = true;
                 localStorage.setItem('video',0)
+                videoMute(false)
             }
 
             broadcastNewTracks(myStream, 'video');
         });
-
 
         //When the mute icon is clicked
         document.getElementById('toggle-mute').addEventListener('click', (e) => {
@@ -464,6 +527,7 @@ window.addEventListener('load', () => {
                 e.target.setAttribute('uk-tooltip', 'title:Voice is muted; pos:bottom')
 
                 myStream.getAudioTracks()[0].enabled = false;
+
             } else {
                 e.target.setAttribute('src', '../assets/img/mike.png')
                 e.target.setAttribute('uk-tooltip', 'title:Voice is audible; pos:bottom')

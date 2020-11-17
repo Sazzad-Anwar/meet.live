@@ -52,15 +52,15 @@ app.use(function (req, res, next) {
 });
 
 
-db.db.getConnection(err => {
-  if (err) {
-    console.log(`Failed to connect to database causing ${err}`);
-  } else {
-    console.log('Database is connected');
-  }
-});
+// db.db.getConnection(err => {
+//   if (err) {
+//     console.log(`Failed to connect to database causing ${err}`);
+//   } else {
+//     console.log('Database is connected');
+//   }
+// });
 
-  // creating Meeting tables if not exists
+  //creating Meeting tables if not exists
   let createTableMeeting = `CREATE TABLE IF NOT EXISTS meeting(
   id int PRIMARY KEY AUTO_INCREMENT,
   meeting_id TEXT NOT NULL,
@@ -68,7 +68,7 @@ db.db.getConnection(err => {
   room_master_name TEXT NOT NULL,
   room_master_email TEXT NOT NULL,
   status TEXT NOT NULL,
-  room_creation_time TEXT NOT NULL,
+  room_creation_time TIMESTAMP NOT NULL,
   meeting_closing_time TEXT NOT NULL
   )`
   let createTableQuery = db.db.query(createTableMeeting, (err, done) => {
@@ -83,7 +83,7 @@ db.db.getConnection(err => {
   email TEXT NULL,
   status TEXT NOT NULL,
   Ip_address TEXT NOT NULL,
-  meeting_joining_time TEXT NOT NULL
+  meeting_joining_time TIMESTAMP NOT NULL
   )`
   let createParticipantsQuery = db.db.query(createTableParticipants, (err, done) => {
     if (err) throw err;
@@ -117,13 +117,12 @@ let passQuery = db.db.query('SELECT * FROM vault',(err,vault)=>{
   }
 });
 
-
 //royex video app main page
 app.get('/', (req, res) => {
   res.render('royex_live');
 });
-app.use('/meeting', require('./routes/meeting'));
-app.use('/admin', require('./routes/admin'));
+// app.use('/meeting', require('./routes/meeting'));
+// app.use('/admin', require('./routes/admin'));
 
 io.of('/stream').on('connection', stream);
 

@@ -125,23 +125,51 @@ export default {
 
     participent(data,senderType){
         if(senderType === 'remote'){
-            setTimeout(function(){ 
+            setInterval(function(){ 
                 $(`#${data.socketId}-name`).text(data.sender);
-                let ul = document.getElementById('participant')
-                let li = document.createElement('li')
-                li.id = `${data.socketId}-participant`
-                li.classList = 'name_list'
-                let senderName=''
-                ul.appendChild(li)
+                
+            }, 1000);
+            
+            // let ul = document.getElementById('participant')
+            // let li = document.createElement('li')
+            // li.id = `${data.socketId}-participant`
+            // li.classList = 'name_list'
+            // ul.appendChild(li)
+            // $(`#${data.socketId}-participant`).text(data.sender);
+
+            let div = document.getElementById('participant');
+            let nameList = document.createElement('div');
+            nameList.id = `${data.socketId}-participant`;
+            nameList.className = 'name_list';
+            div.appendChild(nameList);
+
+            setInterval(function () {
                 $(`#${data.socketId}-participant`).text(data.sender);
             }, 1000);
+
         }
     },
 
-    deleteName( elemId ) {
-        if ( document.getElementById( `${elemId}-participant` ) ) {
-            document.getElementById( `${elemId}-participant` ).remove();
+    showImageOnMuteVideo(data,type){
+        console.log(data.status === 1 && type === 'remote',data,type);
+        if(data.status === 1 && type === 'remote'){
+            $(`#${data.socketId}-video`).addClass('uk-hidden');
+            $(`#${data.socketId}-video > .remote-video-controls`).addClass('uk-hidden')
+            $(`#${data.socketId}-image`).removeClass('uk-hidden');
+            $(`#${data.socketId}-mutename`).text(data.sender);
+            localStorage.setItem(data.socketId,data.status)
         }
+        else{
+            $(`#${data.socketId}-image`).addClass('uk-hidden');
+            $(`#${data.socketId}-video`).removeClass('uk-hidden');
+            $(`#${data.socketId}-video > .remote-video-controls`).removeClass('uk-hidden')
+            localStorage.setItem(data.socketId,data.status)
+        }
+    },
+
+    removeParticipant(data){
+        // $(`#${data}-participant`).hide()
+        document.getElementById(`${data}-participant`).remove()
     },
 
     addChat( data, senderType ) {

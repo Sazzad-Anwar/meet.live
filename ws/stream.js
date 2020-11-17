@@ -6,7 +6,7 @@ const stream = ( socket ) => {
 
         //Inform other members in the room of new user's arrival
         if ( socket.adapter.rooms[data.room].length > 1 ) {
-            socket.to( data.room ).emit( 'new user', { socketId: data.socketId } );
+            socket.to( data.room ).emit( 'new user', { socketId: data.socketId} );
         }
     } );
 
@@ -32,6 +32,10 @@ const stream = ( socket ) => {
 
     socket.on( 'participant', ( data ) => {
         socket.to( data.room ).emit( 'participant', { sender: data.sender, socketId:data.socketId } );
+    } );
+
+    socket.on( 'muteVideo', ( data ) => {
+        socket.to( data.room ).emit( 'muteVideo', { sender: data.sender, socketId:data.socketId, status:data.status } );
     } );
 };
 

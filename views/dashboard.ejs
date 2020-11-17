@@ -40,7 +40,7 @@
                                     <% meeting_time = duration.filter(ele=> ele.meeting_id === meeting.meeting_id) %>
                                     <% console.log(meeting_time); %>  
                                     <% if (meeting_time.length !== 0) { %>
-                                    <li>Ended At: <span class="pl-3 font-weight-bolder"><%= (meeting.meeting_closing_time).toString().slice(0,24) %></span></li>
+                                    <li>Ended At: <span class="pl-3 font-weight-bolder"><%= (meeting.meeting_closing_time).toString().slice(0,19) %></span></li>
                                     <li>Meeting Duration: <span class="pl-3 font-weight-bolder"><%= (meeting_time[0].duration).toString().slice(0,8) %></span> </li>
                                     <% }else{%>
                                     
@@ -60,7 +60,7 @@
     </div>
 
     <!-- footer -->
-    <!-- <footer>
+    <footer>
         <div class="uk-visible@m" id="footer-for-video-panel">
             <div class="uk-navbar-container footer uk-position-bottom" uk-navbar>
                 <div class="uk-navbar-left">
@@ -84,7 +84,7 @@
                 </div>
             </div>
         </div>
-    </footer> -->
+    </footer>
 </section>
 
 </body>
