@@ -1,15 +1,36 @@
 <%- include('./header')  %> 
 <title>Royex Live</title>
+<style>
+    .card{
+        width: 50% !important;
+    }
+    .remote-video-controls span{
+        font-size: .8rem !important;
+    }
+    .remote-video-controls img{
+        height: 15px !important;
+    }
+    .uk-card{
+        width: 100% !important;
+    }
+    .center{
+        padding-left: 50px;
+    }
+</style>
 <script>
+    const meetingRoom =(location.href).split('room=')[1];
+
     if(localStorage.getItem('layout') === '2'){
-        $('#button-1').click();
+        $('#layout-2').submit();
         console.log(localStorage.getItem('layout') === '2');
     }
     else if(localStorage.getItem('layout') === '1'){
-        $('#button-1').click();
+        $('#layout-1').submit();
     }
 
 </script>
+
+
     <!-- navbar -->
     <header>
         <nav class="uk-navbar-container bg_img py-2 room-comm" id="nav" hidden uk-navbar>
@@ -50,13 +71,12 @@
                                     <form method="post" id="layout-2">
                                         <input type="number" hidden name="layout" value="2">
                                         <input type="text" hidden name="username">
-                                        <a  class="layout white_text" id="button-2"  uk-tooltip="Change to layout 2"> Layout 2</a>
+                                        <a  class="layout white_text" id="button-2"  uk-tooltip="Change to layout 2" onclick='$("#layout-2").submit()'> Layout 2</a>
                                     </form>
                                 </li>
                                 <!-- <li>
                                     <a  class="layout white_text"  uk-tooltip="Change to layout 1" id='layout-2'> Layout 2</a>
                                 </li> -->
-                                
                             </ul>
                         </div>
                     </li>
@@ -131,7 +151,7 @@
                                 <div class="uk-alert-danger uk-hidden" id="alert-email" uk-alert>
     
                                     <p class="form-text text-font" id='err-msg-email'></p>
-                                </div>
+                                </div>`
                             </div>
                             <div class="uk-margin uk-text-center">
                                 <div class="uk-child-width-1-2@m uk-child-width-1-1@s">
@@ -142,7 +162,7 @@
                             </div>
                         </div>
                     </div>
-
+    
                     <!-- Join Meeting Part -->
                     <div>
                         <div class="uk-card border uk-padding uk-border-rounded" style="background-color: #ffff;">
@@ -392,7 +412,7 @@
 
         <!-- footer -->
         <footer>
-            <div class="uk-visible@m" id="footer-for-video-panel">
+            <div class="uk-visible@ m" id="footer-for-video-panel">
                 <div class="footer uk-position-bottom uk-flex-inline">
                     <div class="uk-navbar-left">
                         <ul class="my-3">
@@ -422,23 +442,32 @@
     <!-- video window appearance setting -->
     <section class="row m-0 p-0 room-comm" id="main-section" hidden style="min-height: 87vh;height: 87vh;">
         <div class="col-12 col-lg-10 col-xl-10 col-md-10 m-0 p-0 uk-overflow-auto" style="background-color: #000;min-height: 87vh;height: 87vh;">
-            <div class="pt-3 uk-grid-collapse mx-3 uk-grid-match" uk-grid id='videos'>
-                <div class="card" style="border: 1px solid #622C80 !important">
-                    <video class="mirror-mode" id='local' volume='0' autoplay muted></video>
+            <div class="pt-3 uk-grid-collapse mx-3">
+                <div style="border: 1px solid #622C80;">
+                    <video class="mirror-mode" id='local' style="width: 100%;height: 80vh;" volume='0' autoplay muted></video>
                     <img src="https://picsum.photos/1920/920" class="uk-hidden mute-image" id="local-image">
                 </div>
             </div>
         </div>
-        <div class="col-2 col-lg-2 col-xl-2 col-md-2 m-0 p-0 uk-visible@m" id="chat-section"> 
-            <div class="participant_area" id='chat-pane'>
+        <div class="col-2 col-lg-2 col-xl-2 col-md-2 m-0 p-0 uk-visible@m uk-overflow-auto" id="chat-section"  style="background-color: #000000;"> 
+            <div class="uk-width-1-1" style="background-color: #622C80;">
+                <h3 class="white_text pl-3 py-2 mb-1">Participants</h3>
+            </div>
+            <div class="pt-1 px-1 uk-grid-collapse uk-grid-match uk-child-width-1-1 uk-grid uk-overflow-auto" style="max-height: 760px;" uk-grid id='videos'>
+                <!-- <div class="card" style="border: 1px solid #622C80">
+                    <video class="mirror-mode" id='local' volume='0' autoplay muted></video>
+                    <img src="https://picsum.photos/1920/920" class="uk-hidden mute-image" id="local-image">
+                </div> -->
+            </div>
+            <div class="participant_area uk-hidden" id='chat-pane'>
                 <div class="uk-width-1-1" style="background-color: #622C80;">
                     <h3 class="white_text pl-3 py-2">Participants</h3>
                 </div>
-                <div class="participant_area px-3 uk-overflow-auto" style="max-height: 20vh;min-height: 20vh;">
+                <div class="participant_area " style="max-height: 20vh;min-height: 20vh;">
                     <ul class="uk-list" id="participant"></ul>
                 </div>
             </div>
-            <div class="chat_area">
+            <div class="chat_area uk-hidden">
                 <div class="uk-width-1-1" style="background-color: #622C80;">
                     <h3 class="white_text pl-3 py-2">Chat</h3>
                 </div>
@@ -483,6 +512,18 @@
     <div id="videoMuteStatus" class="uk-hidden"></div>
 
     <script>
+    
+        const meetingRoom =(location.href).split('room=')[1];
+    
+        if(localStorage.getItem('layout') === '2'){
+            $('#layout-2').click();
+        }
+        else if(localStorage.getItem('layout') === '1'){
+            $('#layout-1').click();
+        }
+    </script>
+
+    <script>
         let room_name_id
         if(location.href.includes('?')){
             let link = location.href.split('?')
@@ -522,6 +563,23 @@
             })
         }
 
+        const number =(location.href).split('room=')[1];
+
+        
+
+        $('#layout-1').click(e=>{
+            e.preventDefault();
+            localStorage.setItem('layout',1);
+            $(this).attr('action',`/?room=${number}`)
+        })
+
+        $('#layout-2').click(e=>{
+            e.preventDefault();
+            localStorage.setItem('layout',2);
+            $(this).attr('action',`/?room=${number}`)
+        })
+
+
         $(document).ready(function(e) {
             $('input[name="mute-video"]').click(function(){
                 if($(this).is(":checked")){
@@ -545,24 +603,11 @@
                     localStorage.setItem('audio',1) 
                 }
             });
-
             $('input[name="username"]').val(window.sessionStorage.getItem('username'));
-        
         let index_video = localStorage.getItem('video');
         $('#mute-video').val(index_video);
         let index_audio = localStorage.getItem('audio');
         $('#mute-audio').val(index_audio);
-
-        $('#button-1').click(e=>{
-            e.preventDefault();
-            $('#layout-1').submit();
-            localStorage.setItem('layout',1);
-        });
-        $('#button-2').click(e=>{
-            e.preventDefault();
-            $('#layout-2').submit();
-            localStorage.setItem('layout',2);
-        });
 
     });
     </script>

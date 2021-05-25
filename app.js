@@ -14,11 +14,14 @@ const passport = require('passport');
 const bcrypt = require('bcryptjs');
 require('./config/passport')(passport);
 
-const mysql = require('mysql')
+const mysql = require('mysql');
+const { resourceUsage } = require('process');
 
 app.use(express.urlencoded({
   extended: true
 }))
+
+app.use(express.json());
 
 app.use(cors());
 
@@ -28,6 +31,7 @@ app.set('view engine', 'ejs');
 
 app.use('/assets', express.static(path.join(__dirname, 'assets')));
 app.use('/admin/assets', express.static(path.join(__dirname, 'assets')));
+app.use(express.static('assets'));
 
 app.use(
   session({
@@ -83,7 +87,10 @@ app.use(function (req, res, next) {
   email TEXT NULL,
   status TEXT NOT NULL,
   Ip_address TEXT NOT NULL,
-  meeting_joining_time TIMESTAMP NOT NULL
+  meeting_joining_time TIMESTAMP NOT NULL,
+  layout TEXT NULL,
+  audioMute TEXT NULL,
+  videoMute TEXT NULL
   )`
   let createParticipantsQuery = db.db.query(createTableParticipants, (err, done) => {
     if (err) throw err;
@@ -99,6 +106,17 @@ app.use(function (req, res, next) {
   let createVaultQuery = db.db.query(createTableVault, (err, done) => {
     if (err) throw err;
   });
+
+//create a table for layout stting
+let layoutTable = `CREATE TABLE IF NOT EXISTS layout(
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  name TEXT NOT NULL,
+  layout INT NOT NULL
+)`;
+
+db.db.query(layoutTable,(err,done)=>{
+  if(err) throw err;
+});
 
 //automatic set password
 let passQuery = db.db.query('SELECT * FROM vault',(err,vault)=>{
@@ -118,11 +136,57 @@ let passQuery = db.db.query('SELECT * FROM vault',(err,vault)=>{
 });
 
 //royex video app main page
-app.get('/', (req, res) => {
-  res.render('royex_live');
+app.get('/', async(req, res) => {
+  // const { username } = req.body;
+  // try {
+  //   const getLayout = async()=>{
+  //     return await db.query('SELECT * FROM layout WHERE name=?',username);
+  //   }
+  
+  //   let layoutname = await getLayout();
+  
+  //   if(layoutname.length !==0 && layoutname[0].layout === '2'){
+  //     res.render('layout-2');
+  //   }else{
+  //     res.render('royex_live');
+  //   }
+  // } catch (error) {
+  //   console.log(error);
+  // }
+  // res.render('royex_live');
+  res.json(req.body);
+  
 });
-// app.use('/meeting', require('./routes/meeting'));
-// app.use('/admin', require('./routes/admin'));
+
+app.post('/', async(req, res) => {
+  const { layout,username } = req.body;
+
+  db.db.query('SELECT * FROM layout WHERE name=?',username,(err,found)=>{
+    if(err) throw err;
+    if(found.length !== 0){
+      db.query('UPDATE layout SET layout=? WHERE name=?',[layout,username],(err,done)=>{
+        if(err) throw err;
+        if(layout === '2'){
+          res.render('layout-2');
+        }else{
+          res.render('royex_live');
+        }
+      })
+    }else{
+      db.query('INSERT INTO layout (name,layout) VALUES (?,?)',[username,layout],(err,done)=>{
+        if(err) throw err;
+        if(layout === '2'){
+          res.render('layout-2');
+        }else{
+          res.render('royex_live');
+        }
+      })
+    }
+  }); 
+});
+
+app.use('/meeting', require('./routes/meeting'));
+app.use('/admin', require('./routes/admin'));
 
 io.of('/stream').on('connection', stream);
 

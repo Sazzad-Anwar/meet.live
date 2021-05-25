@@ -48,7 +48,7 @@ $(document).ready(function () {
             document.querySelector('#err-msg-room-id').innerHTML = "Meeting ID is required !";
         } else if (!ID && !url) {
             document.getElementById('alert-join-way').classList.remove('uk-hidden')
-            document.querySelector('#err-msg-join-way').innerHTML =
+            document.querySelector('#err-msg-join-way').innerHTML 
                 "Join way method is required !";
         }
     });

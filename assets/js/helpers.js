@@ -123,6 +123,27 @@ export default {
         };
     },
 
+    kick(data,senderType){
+        console.log(data,senderType);
+        if(senderType === 'remote'){
+            if(document.getElementById(`${data}-participant`)){
+
+                document.getElementById(`${data}-participant`).remove()
+            }else{
+                window.location ='/';
+            }
+            console.log(data);
+        }else{
+            if(document.getElementById(`${data}-participant`)){
+
+                document.getElementById(`${data}-participant`).remove()
+            }else{
+                window.location ='/';
+            }
+            console.log(data);
+        }
+    },
+
     participent(data,senderType){
         if(senderType === 'remote'){
             setInterval(function(){ 
@@ -152,11 +173,11 @@ export default {
 
     showImageOnMuteVideo(data,type){
         console.log(data.status === 1 && type === 'remote',data,type);
-        if(data.status === 1 && type === 'remote'){
-            $(`#${data.socketId}-video`).addClass('uk-hidden');
-            $(`#${data.socketId}-video > .remote-video-controls`).addClass('uk-hidden')
+        if(data.status === 1){
             $(`#${data.socketId}-image`).removeClass('uk-hidden');
             $(`#${data.socketId}-mutename`).text(data.sender);
+            $(`#${data.socketId}-video`).addClass('uk-hidden');
+            $(`#${data.socketId}-video > .remote-video-controls`).addClass('uk-hidden')
             localStorage.setItem(data.socketId,data.status)
         }
         else{

@@ -37,6 +37,9 @@ const stream = ( socket ) => {
     socket.on( 'muteVideo', ( data ) => {
         socket.to( data.room ).emit( 'muteVideo', { sender: data.sender, socketId:data.socketId, status:data.status } );
     } );
+    socket.on( 'kick', ( data ) => {
+        socket.to( data.room ).emit( 'kick', {socketId:data.socketId} );
+    } );
 };
 
 module.exports = stream;

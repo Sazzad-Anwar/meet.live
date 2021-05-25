@@ -106,6 +106,9 @@ window.addEventListener('load', () => {
             socket.on('participant', (data) => {
                 h.participent(data, 'remote');
             });
+            socket.on('kick',(data)=>{
+                h.kick(data,'remote');
+            })
         });
     
         function getAndSetUserStream() {
@@ -126,6 +129,15 @@ window.addEventListener('load', () => {
             };
             socket.emit('participant',senderData);
             // h.participent(senderData, 'local');
+        }
+
+        function kick(){
+            let data ={
+                room:room
+            }
+
+            socket.emit('kick',data);
+            h.kick(data,'local')
         }
 
         function sendMsg(msg) {
@@ -275,44 +287,30 @@ window.addEventListener('load', () => {
                         }).catch((e) => {
                             console.error(`stream error: ${ e }`);
                         });
-                    }
-
-                    
-                    // if (id === 1 ) {
-                    //     $(`#${partnerName}-image`).removeClass('uk-hidden');
-                    //     $(`#${partnerName}-mutename`).text(partnerName);
-                    //     $(`#${partnerName}-video`).addClass('uk-hidden');
-                    //     $(`#${partnerName}-video > .remote-video-controls`).addClass('uk-hidden')
-                        
-                    // }else{
-                    //     $(`#${partnerName}-image`).addClass('uk-hidden');
-                    //     $(`#${partnerName}-video`).removeClass('uk-hidden');
-                    //     $(`#${partnerName}-video > .remote-video-controls`).removeClass('uk-hidden')
-                        
-                    // }
+                    } 
 
                     //video controls elements
                     let controlDiv = document.createElement('div');
                     controlDiv.className = 'remote-video-controls';
                     controlDiv.innerHTML = `<span class='text-white pr-3 h5' id="${partnerName}-name"></span><img src="./assets/img/mike.png" id='toggle-mute' style="height:20px" class="pr-3 pointer fa-microphone mute-remote-mic microphone" uk-tooltip="title:Mute voice;pos:bottom">
-                    <img src="./assets/img/Desktop.png" class="fa-expand expand-remote-video white_text" uk-tooltip="title:view full screen;pos:bottom" style="height:20px">`;
-
+                    <img class="pr-3" src="./assets/img/Desktop.png" class="fa-expand expand-remote-video white_text" uk-tooltip="title:view full screen;pos:bottom" style="height:20px;cursor:pointer"> <span class="kick"><img src="./assets/img/leave.png" style="height:25px;cursor:pointer" uk-tooltip="title:Kick;pos:bottom"></span>`;
 
                     let image = document.createElement(`div`)
                     image.className ='mute-image uk-hidden';
                     image.id =`${partnerName}-image`;
                     image.innerHTML = `<img src='https://picsum.photos/950/711' class="image" style="filter:brightness(0.5);" >`
 
-                    let name = document.createElement(`div`)
+                    let name = document.createElement(`div`);
+                    name.style="display: flex; flex-direction: row"
                     name.id = `${partnerName}-name`
                     name.className = 'center'
-                    name.innerHTML = `<span class='pr-3 h5' id="${partnerName}-mutename">${partnerName}</span> <img src="./assets/img/mike.png" id='toggle-mute' style="height:23px" class="pr-3 fa-microphone mute-remote-mic pointer microphone" uk-tooltip="title:Mute voice;pos:bottom"> <img src="../assets/img/close-video.png" style="height:23px">`
+                    name.innerHTML = `<span class='pr-3 h6' id="${partnerName}-mutename">${partnerName.slice(0,8)}</span> <img src="./assets/img/mike.png" id='toggle-mute' style="height:20px" class="pr-3 fa-microphone mute-remote-mic pointer microphone" uk-tooltip="title:Mute voice;pos:bottom"> <img src="../assets/img/close-video.png" style="height:20px">`
                     image.appendChild(name)
 
                     //create a new div for card
                     let cardDiv = document.createElement('div');
                     cardDiv.className = 'card card-sm';
-                    cardDiv.className = 'uk-card uk-card-default card';
+                    cardDiv.className = 'uk-card uk-card-default card mb-2';
                     cardDiv.id = partnerName;
                     cardDiv.appendChild(newVid);
                     cardDiv.appendChild(controlDiv);
@@ -467,6 +465,11 @@ window.addEventListener('load', () => {
             }
         });
 
+        document.getElementsByClassName('kick').addEventListener('click',e=>{
+            e.preventDefault();
+            kick()
+        });
+
         //send text message by pressing button
         document.getElementById('msg-send-btn').addEventListener('click', (e) => {
             // if (e.which === 13 && (e.target.value.trim())) {
@@ -492,7 +495,7 @@ window.addEventListener('load', () => {
             let elem = document.getElementById('toggle-video');
             if (myStream.getVideoTracks()[0].enabled) {
                 elem.classList.remove('pt-3')
-                elem.classList.add('pt-2')
+                elem.classList.add('pt-2') 
                 e.target.setAttribute('src', '../assets/img/close-video.png')
                 e.target.setAttribute('uk-tooltip', 'title:Camera is off; pos:bottom')
                 document.getElementById('local').classList.add('uk-hidden');
@@ -510,7 +513,7 @@ window.addEventListener('load', () => {
                 document.getElementById('local-image').classList.add('uk-hidden');
                 myStream.getVideoTracks()[0].enabled = true;
                 localStorage.setItem('video',0)
-                videoMute(false)
+                videoMute(false);
             }
 
             broadcastNewTracks(myStream, 'video');
