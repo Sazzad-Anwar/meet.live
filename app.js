@@ -153,8 +153,7 @@ app.get('/', async (req, res) => {
   //   console.log(error);
   // }
   // res.render('royex_live');
-  res.json(req.body);
-
+  res.render('royex_live');
 });
 
 app.post('/', async (req, res) => {
