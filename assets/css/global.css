@@ -295,6 +295,15 @@ a {
     margin: 0;
 }
 
+.message-text-sender p:first-child {
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.input-group + .text-danger {
+    font-size: 12px;
+}
+
 .my-video {
     background-color: #fff;
 }
