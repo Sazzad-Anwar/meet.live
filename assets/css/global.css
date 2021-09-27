@@ -296,12 +296,12 @@ a {
 }
 
 .message-text-sender p:first-child {
-    font-size: 12px;
-    font-weight: 600;
+    font-size: 12px !important;
+    font-weight: 600 !important;
 }
 
 .input-group + .text-danger {
-    font-size: 12px;
+    font-size: 12px !important;
 }
 
 .my-video {

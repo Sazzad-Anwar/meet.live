@@ -112,19 +112,28 @@ export default {
     getIceServer() {
         return {
             iceServers: [
+                // {
+                //     urls: ["stun:stun.royex.io"]
+                // },
+                // {
+                //     urls: [
+                //         "turn:turn.royex.io:3478?transport=udp",
+                //         "turn:turn.royex.io:5349?transport=tcp"
+                //     ],
+                //     username: "root",
+                //     credential: "QXg*c3G8*LCj"
+                // }
                 {
-                    urls: ["stun:stun.royex.io"]
-                },
-                {
-                    urls: [
-                        "turn:turn.royex.io:3478?transport=udp",
-                        "turn:turn.royex.io:5349?transport=tcp"
-                    ],
-                    // username: "royex",
-                    // credential: "12345"
-                    username: "root",
-                    credential: "QXg*c3G8*LCj"
-                }
+        urls: [
+          "stun:stun1.l.google.com:19302",
+          "stun:stun2.l.google.com:19302",
+        ],
+      },
+      {
+        urls: [
+          "stun:global.stun.twilio.com:3478?transport=udp",
+        ],
+      },
             ]
         };
     },
