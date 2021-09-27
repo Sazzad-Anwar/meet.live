@@ -1,214 +1,176 @@
 import helpers from './helpers.js';
 
-window.addEventListener( 'load', () => {
-
+window.addEventListener('load', () => {
     //When the chat icon is clicked
-        let baseUrl;
-        // document.querySelector( '#toggle-chat-pane' ).addEventListener( 'click', ( e ) => {
-            let chatElem = document.querySelector( '#chat-pane' );
-            let mainSecElem = document.querySelector( '#main-section' );
-    
-            if ( chatElem.classList.contains( 'chat-opened' ) ) {
-                chatElem.setAttribute( 'hidden', true );
-                // mainSecElem.classList.remove( 'col-md-9' );
-                mainSecElem.classList.add( 'col-md-12' );
-                chatElem.classList.remove( 'chat-opened' );
-            }
+    // document.querySelector('#toggle-chat-pane').addEventListener('click', (e) => {
+    //     let chatElem = document.querySelector('#chat-pane');
+    //     let mainSecElem = document.querySelector('#main-section');
 
-            else {
-                // chatElem.attributes.removeNamedItem( 'hidden' );
-                mainSecElem.classList.remove( 'col-md-12' );
-                // mainSecElem.classList.add( 'col-md-9' );
-                chatElem.classList.add( 'chat-opened' );
-                document.getElementById('main-section').classList.add('video-panel');
+    //     if (chatElem.classList.contains('chat-opened')) {
+    //         chatElem.setAttribute('hidden', true);
+    //         mainSecElem.classList.remove('col-md-9');
+    //         mainSecElem.classList.add('col-md-12');
+    //         chatElem.classList.remove('chat-opened');
+    //     }
 
-                if($('#main-section').attr('hidden') !== 'hidden'){
-                    $('#footer-for-video-panel').removeClass('uk-hidden')
-                    let link = location.href.split('?')
-                    let room = link[1].split('=');
-                    let room_id = room[1];
-                    let url = link[0];
+    //     else {
+    //         chatElem.attributes.removeNamedItem('hidden');
+    //         mainSecElem.classList.remove('col-md-12');
+    //         mainSecElem.classList.add('col-md-9');
+    //         chatElem.classList.add('chat-opened');
+    //     }
 
-                    // console.log($('#partnerID').val());
-
-                    // function continuousFetch(){
-                    //     //fetch call to get participants name from database
-                    //     fetch(`${url}meeting/participants/${room_id}`,{
-                    //         method:'get',
-                    //         headers:{
-                    //             'Content-Type': 'application/json'
-                    //         }
-                    //     }).then(res=> res.json()).then(jsonData=>{
-                            
-                    //         jsonData.map(participant=>{
-                    //             let li = document.createElement('li')
-                    //             let ul = document.getElementById('participant')
-
-                    //             li.className = 'name_list'
-                    //             li.innerText = participant.participant_name
-                    //             console.log(participant);
-                    //             ul.appendChild(li);  
-                    //         })
-
-                    //         console.log(jsonData);
-                    //     });
-                    // }
-                    // setTimeout(function(){continuousFetch();},3000)
-                }
-            }
-    
-            //remove the 'New' badge on chat icon (if any) once chat is opened.
-            setTimeout( () => {
-                if ( document.querySelector( '#chat-pane' ).classList.contains( 'chat-opened' ) ) {
-                    helpers.toggleChatNotificationBadge();
-                }
-            }, 300 );
-        // } );
+    //     //remove the 'New' badge on chat icon (if any) once chat is opened.
+    //     setTimeout(() => {
+    //         if (document.querySelector('#chat-pane').classList.contains('chat-opened')) {
+    //             helpers.toggleChatNotificationBadge();
+    //         }
+    //     }, 300);
+    // });
 
 
     //When the video frame is clicked. This will enable picture-in-picture
-    document.getElementById( 'local' ).addEventListener( 'click', () => {
-        if ( !document.pictureInPictureElement ) {
-            document.getElementById( 'local' ).requestPictureInPicture()
-                .catch( error => {
-                    // Video failed to enter Picture-in-Picture mode.
-                    console.error( error );
-                } );
-        }
+    // document.getElementById('local').addEventListener('click', () => {
+    //     if (!document.pictureInPictureElement) {
+    //         document.getElementById('local').requestPictureInPicture()
+    //             .catch(error => {
+    //                 // Video failed to enter Picture-in-Picture mode.
+    //                 console.error(error);
+    //             });
+    //     }
 
-        else {
-            document.exitPictureInPicture()
-                .catch( error => {
-                    // Video failed to leave Picture-in-Picture mode.
-                    console.error( error );
-                } );
-        }
-    } );
+    //     else {
+    //         document.exitPictureInPicture()
+    //             .catch(error => {
+    //                 // Video failed to leave Picture-in-Picture mode.
+    //                 console.error(error);
+    //             });
+    //     }
+    // });
+
 
     //When the 'Create room" is button is clicked
-    document.getElementById( 'create-room' ).addEventListener( 'click', ( e ) => {
+    document.getElementById('create-room').addEventListener('click', (e) => {
         e.preventDefault();
-        let roomName = document.querySelector( '#room-name' ).value;
-        let yourName = document.querySelector( '#your-name' ).value;
-        let yourEmail = document.querySelector( '#your-email' ).value;
+        let roomName = document.querySelector('#room-name').value;
+        let yourName = document.querySelector('#your-name').value;
+        let yourEmail = document.querySelector('#your-email').value;
 
-        if ( roomName && yourName && yourEmail ) {
+        if (roomName && yourName && yourEmail) {
             //remove error message, if any
-            // document.querySelector( '#err-msg' ).innerHTML = "";
+            document.querySelector('#meeting-name-error').innerHTML = "";
+            document.querySelector('#user-name-error').innerHTML = "";
+            document.querySelector('#user-email-error').innerHTML = "";
 
             //save the user's name in sessionStorage
-            sessionStorage.setItem( 'username', yourName );
+            sessionStorage.setItem('username', yourName);
+            sessionStorage.setItem('email', yourEmail);
+            sessionStorage.setItem('isHost', true);
+
+            //get a random string
+            let roomId = helpers.generateRandomString()
 
             //create room link
-            let roomLink = `${ location.origin }?room=${ roomName.replace(/\s+/g,'_')}_${ helpers.generateRandomString() }`;
+            let roomLink = `${location.origin}?room=${roomName.trim().replace(' ', '_')}_${roomId}`;
+
+
 
             //show message with link to room
-            document.querySelector( '#room-created' ).value = `${ roomLink }`;
-            document.querySelector( '#room-id' ).innerHTML = `Meeting ID: ${ roomName.replace(/\s+/g,'_')}_${ helpers.generateRandomString() }`;
-            
-            document.querySelector('#room-creation').classList.remove('uk-hidden')
-            document.querySelector('#room-create').classList.add('uk-hidden')
+            // document.querySelector( '#room-created' ).innerHTML = `Room successfully created. Click <a href='${ roomLink }'>here</a> to enter room. 
+            //     Share the room link with your partners.`;
+
+            // show room-created details page
+            $('#room-created-details').removeAttr('hidden')
+            $('#room-create').attr('hidden', true)
+
+            $('#link-id').text(roomId)
+            $('#meeting-link').text(roomLink)
 
             //empty the values
-            document.querySelector( '#room-name' ).value = '';
-            document.querySelector( '#your-name' ).value = '';
-            document.querySelector( '#your-email' ).value = '';
-
-            let room = roomLink.split('?')
-            let meetingRoomlink = room[1].split('=');
-            let room_id = meetingRoomlink[1]
-            baseUrl = room[0];
-
-            console.log(`${baseUrl}/meeting/room_create`);
-
-            let room_creation_data={
-                "meeting_id":room_id,
-                "meeting_name":roomName,
-                "room_master_name":yourName,
-                "room_master_email":yourEmail,
-            }
-
-            // fetch call to store in databse
-            fetch(`${baseUrl}/meeting/room_create`,{
-                method:'post',
-                body:JSON.stringify(room_creation_data),
-                headers:{
-                    'Content-Type': 'application/json'
-                }
-            }).then(res=> res.json()).then(jsonData=> console.log(jsonData))
-
+            document.querySelector('#room-name').value = '';
+            document.querySelector('#your-name').value = '';
+            document.querySelector('#your-email').value = '';
         }
-        else if(!roomName) {
-            document.getElementById('alert-room-name').classList.remove('uk-hidden')
-            document.querySelector( '#err-msg-room-name' ).innerHTML = "Room Name is required";
 
+        if (!roomName) {
+            document.querySelector('#meeting-name-error').innerHTML = "This field is required";
         }
-        else if(!yourName) {
-            document.getElementById('alert-name').classList.remove('uk-hidden')
-            document.querySelector( '#err-msg-name' ).innerHTML = "Your name is required";
+        else {
+            document.querySelector('#meeting-name-error').innerHTML = "";
+        }
 
+        if (!yourName) {
+            document.querySelector('#user-name-error').innerHTML = "This field is required";
+        } else {
+            document.querySelector('#user-name-error').innerHTML = "";
         }
-        else if(!yourEmail) {
-            document.getElementById('alert-email').classList.remove('uk-hidden')
-            document.querySelector( '#err-msg-email' ).innerHTML = "Your email is required";
 
+        if (!yourEmail) {
+            document.querySelector('#user-email-error').innerHTML = "This field is required";
+        } else {
+            document.querySelector('#user-email-error').innerHTML = "";
         }
-    } );
+    });
 
 
     //When the 'Enter room' button is clicked.
-    document.getElementById('enter-room').addEventListener( 'click', ( e ) => {
+    document.getElementById('enter-room').addEventListener('click', (e) => {
         e.preventDefault();
 
-        let name = document.querySelector( '#username' ).value;
-        let meeting_id = document.querySelector( '#meeting-id' ).value;
-        // let partnerID = document.querySelector( '#partnerID' ).value;
+        let name = document.querySelector('#username').value;
+        let email = document.querySelector('#userEmail').value;
 
-        if ( name ) {
+        if (name && email) {
             //remove error message, if any
-            document.querySelector( '#err-msg-username' ).innerHTML = "";
+            document.querySelector('#username-error').innerHTML = "";
+            document.querySelector('#userEmail-error').innerHTML = "";
 
             //save the user's name in sessionStorage
-            sessionStorage.setItem( 'username', name );
+            sessionStorage.setItem('username', name);
+
+            //save the user's name in sessionStorage
+            sessionStorage.setItem('email', email);
+            sessionStorage.setItem('isHost', false);
+
+            let audioMute = sessionStorage.getItem('audio-mute')
+            let videoMute = sessionStorage.getItem('video-mute')
+
+            sessionStorage.setItem('audio-mute', audioMute ? audioMute : false)
+            sessionStorage.setItem('video-mute', videoMute ? videoMute : false)
 
             //reload room
             location.reload();
+        }
 
-            let join_data={
-                "name":name,
-                "meeting_id":meeting_id,
-            }
-            let room = location.href.split('?')
-            let url = room[0]
-
-            //fetch call to store in database
-            fetch(`${url}meeting/participant/join`,{
-                method:'post',
-                body:JSON.stringify(join_data),
-                headers:{
-                    'Content-Type': 'application/json'
-                }
-            })
+        if (!name) {
+            document.querySelector('#username-error').innerHTML = "This field is required";
         }
 
         else {
-            document.querySelector( '#err-msg-username' ).innerHTML = "Your name is required !";
-        }
-    } );
-
-
-    document.addEventListener( 'click', ( e ) => {
-        if ( e.target && e.target.classList.contains( 'expand-remote-video' ) ) {
-            helpers.maximiseStream( e );
+            document.querySelector('#username-error').innerHTML = ""
         }
 
-        else if ( e.target && e.target.classList.contains( 'microphone' ) ) {
-            helpers.singleStreamToggleMute( e );
+        if (!email) {
+            document.querySelector('#userEmail-error').innerHTML = "This field is required";
         }
-    } );
+        else {
+            document.querySelector('#userEmail-error').innerHTML = "";
+        }
+    });
 
 
-    document.getElementById( 'closeModal' ).addEventListener( 'click', () => {
-        helpers.toggleModal( 'recording-options-modal', false );
-    } );
-} );
+    document.addEventListener('click', (e) => {
+        if (e.target && e.target.classList.contains('expand-remote-video')) {
+            helpers.maximiseStream(e);
+        }
+
+        else if (e.target && e.target.classList.contains('mute-remote-mic')) {
+            helpers.singleStreamToggleMute(e);
+        }
+    });
+
+
+    // document.getElementById('closeModal').addEventListener('click', () => {
+    //     helpers.toggleModal('recording-options-modal', false);
+    // });
+});

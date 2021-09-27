@@ -3,57 +3,72 @@ import h from './helpers.js';
 window.addEventListener('load', () => {
     const room = h.getQString(location.href, 'room');
     const username = sessionStorage.getItem('username');
-
+    const isHost = sessionStorage.getItem('isHost');
+    const email = sessionStorage.getItem('email');
+    let isAudioMuted = sessionStorage.getItem('audio-mute')
+    let isVideoMuted = sessionStorage.getItem('video-mute')
 
     if (!room) {
         document.querySelector('#room-create').attributes.removeNamedItem('hidden');
-    } else if (!username) {
+    }
+
+    else if (!username) {
         document.querySelector('#username-set').attributes.removeNamedItem('hidden');
-    } else {
+    }
+
+    else {
         let commElem = document.getElementsByClassName('room-comm');
 
         for (let i = 0; i < commElem.length; i++) {
             commElem[i].attributes.removeNamedItem('hidden');
-    }
+            $('#footer a.hideOnMobile').attr('onclick', "leaveMeeting()");
+            $('#footer a.hideOnMobile').attr('href', 'javascript:void(0)');
+        }
 
-        var pc = [];
+        let pc = [];
+        let users = [];
 
         let socket = io('/stream');
 
         var socketId = '';
+        var randomNumber = `__${h.generateRandomString()}__${h.generateRandomString()}__`;
         var myStream = '';
         var screen = '';
         var recordedStream = [];
         var mediaRecorder = '';
-
+        let remoteUserName = ''
 
         //Get user video by default
         getAndSetUserStream();
 
+
         socket.on('connect', () => {
             //set socketId
             socketId = socket.io.engine.id;
+            // document.getElementById('randomNumber').innerText = randomNumber;
 
 
             socket.emit('subscribe', {
-                room: room,
-                socketId: socketId
+                room,
+                socketId: socketId,
+                username,
+                isHost,
+                email,
+                isVideoMuted
             });
 
 
             socket.on('new user', (data) => {
-                socket.emit('newUserStart', {
-                    to: data.socketId,
-                    sender: socketId
-                });
+                socket.emit('newUserStart', { to: data.socketId, sender: socketId, username, isHost, email, roomId: room });
                 pc.push(data.socketId);
-                init(true, data.socketId);
+
+                init(true, data.socketId, data.username);
             });
 
 
             socket.on('newUserStart', (data) => {
                 pc.push(data.sender);
-                init(false, data.sender);
+                init(false, data.sender, data.username);
             });
 
 
@@ -82,69 +97,110 @@ window.addEventListener('load', () => {
 
                         await pc[data.sender].setLocalDescription(answer);
 
-                        socket.emit('sdp', {
-                            description: pc[data.sender].localDescription,
-                            to: data.sender,
-                            sender: socketId
-                        });
+                        socket.emit('sdp', { description: pc[data.sender].localDescription, to: data.sender, sender: socketId });
                     }).catch((e) => {
                         console.error(e);
                     });
-                } else if (data.description.type === 'answer') {
+                }
+
+                else if (data.description.type === 'answer') {
                     await pc[data.sender].setRemoteDescription(new RTCSessionDescription(data.description));
                 }
             });
+
 
             socket.on('chat', (data) => {
                 h.addChat(data, 'remote');
             });
 
-            socket.on('muteVideo', (data) => {
-                h.showImageOnMuteVideo(data, 'remote');
+            socket.on('participant', (data) => {
+                users = data;
+                h.participant(data, 'remote');
             });
 
-            socket.on('participant', (data) => {
-                h.participent(data, 'remote');
-            });
-            socket.on('kick',(data)=>{
-                h.kick(data,'remote');
+            socket.on('toggle-video', (data) => {
+                h.toggleVideo(data, 'remote');
+            })
+
+            socket.on("remove-person", data => {
+                console.log(data);
+                if (data.email === email) {
+                    location.href = '/'
+                }
             })
         });
-    
+
+
         function getAndSetUserStream() {
             h.getUserFullMedia().then((stream) => {
                 //save my stream
                 myStream = stream;
+
                 h.setLocalStream(stream);
             }).catch((e) => {
-                console.error(`stream error: ${ e }`);
+                console.error(`stream error: ${e}`);
             });
         }
 
-        function participentName(username){
-            let senderData = {
-                room: room,
-                sender: username,
-                socketId:socketId
-            };
-            socket.emit('participant',senderData);
-            // h.participent(senderData, 'local');
+        function removePerson(socketId) {
+            let userEmail = (users.find(user => user.socketId === socketId)).email
+            socket.emit("remove-person", { socketId, userEmail, room })
         }
 
-        function kick(){
-            let data ={
-                room:room
-            }
+        function addNewUserInList(name, id) {
+            $('.name').append(`
+                    <div class="d-flex my-1" id="${id}-userName">
+                        <div class="col-8 text-truncate">
+                            <p class="p-0 m-0" id="${id}-chatName">${name}</p>
+                        </div>
+                    </div>
+                `)
+        }
 
-            socket.emit('kick',data);
-            h.kick(data,'local')
+        function participantName(username) {
+            let senderData = {
+                room: room,
+                sender: username || sessionStorage.getItem('username'),
+                socketId: socketId
+            };
+            socket.emit('participant', senderData);
+            // h.participant(senderData, 'local');
+        }
+
+        function videoMute(muted) {
+            if (muted) {
+                const data = {
+                    room: room,
+                    socketId: socketId,
+                    sender: username,
+                    status: 1
+                }
+                socket.on('toggle-video', (data) => {
+
+                    h.toggleVideo(data);
+                });
+                h.toggleVideo(data, 'local')
+                socket.emit('toggle-video', data)
+            } else {
+                const data = {
+                    room: room,
+                    socketId: socketId,
+                    sender: username,
+                    status: 0
+                }
+                socket.on('toggle-video', (data) => {
+                    h.toggleVideo(data, 'local');
+                });
+                h.toggleVideo(data)
+                socket.emit('toggle-video', data)
+            }
         }
 
         function sendMsg(msg) {
             let data = {
                 room: room,
                 msg: msg,
-                sender: username
+                sender: `${username}`
             };
 
             //emit chat message
@@ -154,59 +210,37 @@ window.addEventListener('load', () => {
             h.addChat(data, 'local');
         }
 
-        function videoMute(muted){
-            if(muted){
-                const data={
-                    room: room,
-                    socketId: socketId,
-                    sender: username,
-                    status:1
-                }
-                socket.on('muteVideo', (data) => {
-                    console.log(data);
-                    h.showImageOnMuteVideo(data);
-                });
-                h.showImageOnMuteVideo(data, 'local')
-                socket.emit('muteVideo', data)
-            }else{
-                const data={
-                    room: room,
-                    socketId: socketId,
-                    sender: username,
-                    status:0
-                }
-                socket.on('muteVideo', (data) => {
-                    h.showImageOnMuteVideo(data);
-                });
-                h.showImageOnMuteVideo(data)
-                socket.emit('muteVideo', data)
-            }
-        }
-
-
-        function init(createOffer, partnerName) {
+        function init(createOffer, partnerName, username) {
             pc[partnerName] = new RTCPeerConnection(h.getIceServer());
 
             if (screen && screen.getTracks().length) {
                 screen.getTracks().forEach((track) => {
-                    pc[partnerName].addTrack(track, screen); //should trigger negotiationneeded event
+                    pc[partnerName].addTrack(track, screen);//should trigger negotiationneeded event
                 });
-            } else if (myStream) {
+            }
+
+            else if (myStream) {
                 myStream.getTracks().forEach((track) => {
-                    pc[partnerName].addTrack(track, myStream); //should trigger negotiationneeded event
+                    pc[partnerName].addTrack(track, myStream);//should trigger negotiationneeded event
                 });
-            } else {
+            }
+
+            else {
                 h.getUserFullMedia().then((stream) => {
                     //save my stream
                     myStream = stream;
+
                     stream.getTracks().forEach((track) => {
-                        pc[partnerName].addTrack(track, stream); //should trigger negotiationneeded event
+                        pc[partnerName].addTrack(track, stream);//should trigger negotiationneeded event
                     });
+
                     h.setLocalStream(stream);
                 }).catch((e) => {
-                    console.error(`stream error: ${ e }`);
+                    console.error(`stream error: ${e}`);
                 });
             }
+
+
 
             //create offer
             if (createOffer) {
@@ -215,126 +249,121 @@ window.addEventListener('load', () => {
 
                     await pc[partnerName].setLocalDescription(offer);
 
-                    socket.emit('sdp', {
-                        description: pc[partnerName].localDescription,
-                        to: partnerName,
-                        sender: socketId
-                    });
+                    socket.emit('sdp', { description: pc[partnerName].localDescription, to: partnerName, sender: socketId });
                 };
             }
 
 
 
             //send ice candidate to partnerNames
-            pc[partnerName].onicecandidate = ({
-                candidate
-            }) => {
-                socket.emit('ice candidates', {
-                    candidate: candidate,
-                    to: partnerName,
-                    sender: socketId
-                });
+            pc[partnerName].onicecandidate = ({ candidate }) => {
+                socket.emit('ice candidates', { candidate: candidate, to: partnerName, sender: socketId });
             };
+
+
 
             //add
             pc[partnerName].ontrack = (e) => {
                 let str = e.streams[0];
-                if (document.getElementById(`${ partnerName }-video`)) {
-                    document.getElementById(`${ partnerName }-video`).srcObject = str;
-                } else {
-                    //video elem
-                    let newVid = document.createElement('video');
-                    newVid.id = `${ partnerName }-video`;
-                    newVid.srcObject = str;
-                    newVid.autoplay = true;
-                    newVid.className = 'remote-video';
-                    participentName(username,partnerName)
-                    
-                    if ($('#mute-video').val() === '1') {
-                        videoMute(true)
+                if (document.getElementById(`${partnerName}-video`)) {
+                    document.getElementById(`${partnerName}-video`).srcObject = str;
+                }
 
-                        localStorage.setItem(partnerName,1)
+                else {
 
-                        h.getUserFullMedia().then((stream) => {
-                            //save my stream
-                            myStream = stream;
-                            let elem = document.getElementById('toggle-video');
-                            elem.classList.remove('pt-3')
-                            elem.classList.add('pt-2')
-                            elem.setAttribute('src', '../assets/img/close-video.png')
-                            elem.setAttribute('uk-tooltip', 'title:Camera is off; pos:bottom')
-                            document.getElementById('local').classList.add('uk-hidden');
-                            document.getElementById('local-image').classList.remove('uk-hidden');
-                            myStream.getVideoTracks()[0].enabled = false;
-                            broadcastNewTracks(myStream, 'video', true);
+                    let remoteUserName = (users.find(user => user.socketId === partnerName))?.userName;
 
-                        }).catch((e) => {
-                            console.error(`stream error: ${ e }`);
-                        });
+                    if (!remoteUserName) {
+                        setTimeout(() => {
+                            remoteUserName = (users.find(user => user.socketId === partnerName))?.userName;
+                        }, 1000)
+                        addUserVideo()
+                    } else {
+                        addUserVideo()
                     }
-                    if ($('#mute-audio').val() === '1') {
-                        h.getUserFullMedia().then((stream) => {
-                            //save my stream
-                            myStream = stream;
-                            let elem = document.getElementById('toggle-mute');
-                            elem.setAttribute('src', '../assets/img/close-mute.png')
-                            elem.setAttribute('uk-tooltip', 'title:Voice is muted; pos:bottom')
 
-                            myStream.getAudioTracks()[0].enabled = false;
-                            
-                            broadcastNewTracks(myStream, 'audio');
+                    // users.map(user => {
+                    //     if (user.isVideoMuted) {
+                    //         loggedInAsVideoMuted(user.socketId)
+                    //     }
+                    //     if (user.isAudioMuted && email === user.email) {
+                    //         loggedInAsVideoMuted(user.socketId, true)
+                    //     }
+                    // })
 
-                        }).catch((e) => {
-                            console.error(`stream error: ${ e }`);
-                        });
-                    } 
+                    participantName(username);
+                    addNewUserInList(remoteUserName, partnerName)
+                    $('#totalUser').text(`(${$('.video').length - 1})`)
 
-                    //video controls elements
-                    let controlDiv = document.createElement('div');
-                    controlDiv.className = 'remote-video-controls';
-                    controlDiv.innerHTML = `<span class='text-white pr-3 h5' id="${partnerName}-name"></span><img src="./assets/img/mike.png" id='toggle-mute' style="height:20px" class="pr-3 pointer fa-microphone mute-remote-mic microphone" uk-tooltip="title:Mute voice;pos:bottom">
-                    <img class="pr-3" src="./assets/img/Desktop.png" class="fa-expand expand-remote-video white_text" uk-tooltip="title:view full screen;pos:bottom" style="height:20px;cursor:pointer"> <span class="kick"><img src="./assets/img/leave.png" style="height:25px;cursor:pointer" uk-tooltip="title:Kick;pos:bottom"></span>`;
+                    function addUserVideo() {
+                        let remoteVideoDiv = document.createElement('div');
+                        remoteVideoDiv.id = partnerName;
+                        remoteVideoDiv.className = "video";
+                        let remoteVideo = document.createElement('video');
+                        remoteVideo.id = `${partnerName}-video`;
+                        remoteVideo.srcObject = str;
+                        remoteVideo.style.border = "2px solid #622c80"
+                        remoteVideo.autoplay = true;
+                        remoteVideo.className = 'remote-video';
+                        let videoDetails = document.createElement('div');
+                        videoDetails.className = 'video-details';
+                        let videoDetailsName = document.createElement('p');
+                        videoDetailsName.className = "p-0 m-0 text-white";
+                        videoDetailsName.id = `${partnerName}-name`
+                        videoDetailsName.innerText = remoteUserName;
+                        let videoDetailsMic = document.createElement('i');
+                        videoDetailsMic.className = "material-icons fs-7 hover-shadow text-white mute-remote-mic"
+                        videoDetailsMic.innerText = "mic_none"
+                        let videoDetailsZoom = document.createElement('i');
+                        videoDetailsZoom.className = "material-icons fs-7 hover-shadow text-white expand-remote-video"
+                        videoDetailsZoom.innerText = "crop_free"
+                        let personRemove = document.createElement('i');
+                        personRemove.className = `${partnerName} material-icons fs-7 hover-shadow text-white personRemove`
+                        personRemove.innerText = "person_remove"
 
-                    let image = document.createElement(`div`)
-                    image.className ='mute-image uk-hidden';
-                    image.id =`${partnerName}-image`;
-                    image.innerHTML = `<img src='https://picsum.photos/950/711' class="image" style="filter:brightness(0.5);" >`
+                        let staticView = document.createElement('div');
+                        staticView.className = "static-view invisible";
+                        staticView.id = `${partnerName}-static-view`;
+                        let staticViewIcon = document.createElement('i');
+                        staticViewIcon.className = "material-icons hover-shadow text-white";
+                        staticViewIcon.innerText = "person_outline";
+                        staticView.appendChild(staticViewIcon);
 
-                    let name = document.createElement(`div`);
-                    name.style="display: flex; flex-direction: row"
-                    name.id = `${partnerName}-name`
-                    name.className = 'center'
-                    name.innerHTML = `<span class='pr-3 h6' id="${partnerName}-mutename">${partnerName.slice(0,8)}</span> <img src="./assets/img/mike.png" id='toggle-mute' style="height:20px" class="pr-3 fa-microphone mute-remote-mic pointer microphone" uk-tooltip="title:Mute voice;pos:bottom"> <img src="../assets/img/close-video.png" style="height:20px">`
-                    image.appendChild(name)
+                        videoDetails.appendChild(videoDetailsName);
+                        videoDetails.appendChild(videoDetailsMic);
+                        videoDetails.appendChild(videoDetailsZoom);
 
-                    //create a new div for card
-                    let cardDiv = document.createElement('div');
-                    cardDiv.className = 'card card-sm';
-                    cardDiv.className = 'uk-card uk-card-default card mb-2';
-                    cardDiv.id = partnerName;
-                    cardDiv.appendChild(newVid);
-                    cardDiv.appendChild(controlDiv);
-                    cardDiv.appendChild(image);
+                        if (isHost === 'true') {
+                            videoDetails.appendChild(personRemove);
+                        }
 
-                    //put div in main-section elem
-                    document.getElementById('videos').appendChild(cardDiv);
+                        remoteVideoDiv.appendChild(remoteVideo);
+                        remoteVideoDiv.appendChild(staticView);
+                        remoteVideoDiv.appendChild(videoDetails);
 
-                    h.adjustVideoElemSize();
+                        //put div in main-section elem
+                        // $('#videos').append(remoteVideo);
+                        document.getElementById('videos').appendChild(remoteVideoDiv)
+                        h.adjustVideoElemSize();
+                    }
                 }
             };
+
 
 
             pc[partnerName].onconnectionstatechange = (d) => {
                 switch (pc[partnerName].iceConnectionState) {
                     case 'disconnected':
+
                     case 'failed':
                         h.closeVideo(partnerName);
-                        h.removeParticipant(partnerName)
+
                         break;
 
                     case 'closed':
+
                         h.closeVideo(partnerName);
-                        h.removeParticipant(partnerName)
+
                         break;
                 }
             };
@@ -344,36 +373,37 @@ window.addEventListener('load', () => {
             pc[partnerName].onsignalingstatechange = (d) => {
                 switch (pc[partnerName].signalingState) {
                     case 'closed':
-                        console.log("Signalling state is 'closed'");
                         h.closeVideo(partnerName);
-                        h.removeParticipant(partnerName)
                         break;
                 }
             };
         }
 
+
+
         function shareScreen() {
-            h.shareScreen().then( ( stream ) => {
-                h.toggleShareIcons( true );
+            h.shareScreen().then((stream) => {
+                h.toggleShareIcons(true);
 
                 //disable the video toggle btns while sharing screen. This is to ensure clicking on the btn does not interfere with the screen sharing
                 //It will be enabled was user stopped sharing screen
-                h.toggleVideoBtnDisabled( true );
+                h.toggleVideoBtnDisabled(true);
 
                 //save my screen stream
                 screen = stream;
 
                 //share the new stream with all partners
-                broadcastNewTracks( stream, 'video', false );
+                broadcastNewTracks(stream, 'video', false);
 
                 //When the stop sharing button shown by the browser is clicked
-                screen.getVideoTracks()[0].addEventListener( 'ended', () => {
+                screen.getVideoTracks()[0].addEventListener('ended', () => {
                     stopSharingScreen();
-                } );
-            } ).catch( ( e ) => {
-                console.error( e );
-            } );
+                });
+            }).catch((e) => {
+                console.error(e);
+            });
         }
+
 
 
         function stopSharingScreen() {
@@ -393,8 +423,8 @@ window.addEventListener('load', () => {
         }
 
 
+
         function broadcastNewTracks(stream, type, mirrorMode = true) {
-            
             h.setLocalStream(stream, mirrorMode);
 
             let track = type == 'audio' ? stream.getAudioTracks()[0] : stream.getVideoTracks()[0];
@@ -416,7 +446,9 @@ window.addEventListener('load', () => {
                 e.setAttribute('title', 'Stop recording');
                 e.children[0].classList.add('text-danger');
                 e.children[0].classList.remove('text-white');
-            } else {
+            }
+
+            else {
                 e.setAttribute('title', 'Record');
                 e.children[0].classList.add('text-white');
                 e.children[0].classList.remove('text-danger');
@@ -451,6 +483,14 @@ window.addEventListener('load', () => {
             };
         }
 
+        document.addEventListener('click', (e) => {
+            if (e.target && e.target.classList.contains('personRemove')) {
+                let classes = $('.personRemove').attr("class");
+                let socketId = classes.split(' ')[0]
+                removePerson(socketId)
+            }
+        });
+
 
         //Chat textarea
         document.getElementById('chat-input').addEventListener('keypress', (e) => {
@@ -465,78 +505,63 @@ window.addEventListener('load', () => {
             }
         });
 
-        document.getElementsByClassName('kick').addEventListener('click',e=>{
-            e.preventDefault();
-            kick()
-        });
+        if (isVideoMuted === 'true') {
+            setTimeout(() => {
+                document.getElementById('toggle-video').click()
+            }, 2000)
+        }
 
-        //send text message by pressing button
-        document.getElementById('msg-send-btn').addEventListener('click', (e) => {
-            // if (e.which === 13 && (e.target.value.trim())) {
-                e.preventDefault();
-                var chat_msg = document.getElementById('chat-input');
-                if(chat_msg.value === '' || chat_msg.value === null){
-                    return null;
-                }else{
-                    sendMsg(chat_msg.value);
-                }
-
-                setTimeout(() => {
-                    chat_msg.value = '';
-                }, 50);
-            // }
-        });
+        if (isAudioMuted === 'true') {
+            setTimeout(() => {
+                document.getElementById('toggle-mute').click()
+            }, 2000)
+        }
 
         //When the video icon is clicked
         document.getElementById('toggle-video').addEventListener('click', (e) => {
             e.preventDefault();
-            
-            
-            let elem = document.getElementById('toggle-video');
+
             if (myStream.getVideoTracks()[0].enabled) {
-                elem.classList.remove('pt-3')
-                elem.classList.add('pt-2') 
-                e.target.setAttribute('src', '../assets/img/close-video.png')
-                e.target.setAttribute('uk-tooltip', 'title:Camera is off; pos:bottom')
-                document.getElementById('local').classList.add('uk-hidden');
-                document.getElementById('local-image').classList.remove('uk-hidden');
-                myStream.getVideoTracks()[0].enabled = false;
+                // e.target.classList.remove('fa-video');
+                // e.target.classList.add('fa-video-slash');
+                $('#toggle-video .hover-scale i').text('videocam_off');
                 videoMute(true)
-                
-            } else {
-                elem.classList.remove('pt-2')
-                elem.classList.add('pt-3')
-                e.target.setAttribute('src', '../assets/img/video.png')
-                e.target.setAttribute('uk-tooltip', 'title:Camera is on; pos:bottom')
-                $('#local').removeAttr('poster')
-                document.getElementById('local').classList.remove('uk-hidden');
-                document.getElementById('local-image').classList.add('uk-hidden');
+                sessionStorage.setItem('video-mute', true)
+                myStream.getVideoTracks()[0].enabled = false;
+            }
+
+            else {
+                // e.target.classList.remove('fa-video-slash');
+                // e.target.classList.add('fa-video');
+                $('#toggle-video .hover-scale i').text('videocam');
+                sessionStorage.setItem('video-mute', false)
+                videoMute(false)
                 myStream.getVideoTracks()[0].enabled = true;
-                localStorage.setItem('video',0)
-                videoMute(false);
             }
 
             broadcastNewTracks(myStream, 'video');
+
         });
+
 
         //When the mute icon is clicked
         document.getElementById('toggle-mute').addEventListener('click', (e) => {
             e.preventDefault();
 
-            let elem = document.getElementById('toggle-mute');
-
             if (myStream.getAudioTracks()[0].enabled) {
-                e.target.setAttribute('src', '../assets/img/close-mute.png')
-                e.target.setAttribute('uk-tooltip', 'title:Voice is muted; pos:bottom')
-
+                // e.target.classList.remove('fa-microphone-alt');
+                // e.target.classList.add('fa-microphone-alt-slash');
+                $('#toggle-mute .hover-scale i').text('mic_off');
+                sessionStorage.setItem('audio-mute', true)
                 myStream.getAudioTracks()[0].enabled = false;
+            }
 
-            } else {
-                e.target.setAttribute('src', '../assets/img/mike.png')
-                e.target.setAttribute('uk-tooltip', 'title:Voice is audible; pos:bottom')
-
+            else {
+                // e.target.classList.remove('fa-microphone-alt-slash');
+                // e.target.classList.add('fa-microphone-alt');
+                $('#toggle-mute .hover-scale i').text('mic_none');
+                sessionStorage.setItem('audio-mute', false)
                 myStream.getAudioTracks()[0].enabled = true;
-                localStorage.setItem('audio',0)
             }
 
             broadcastNewTracks(myStream, 'audio');
@@ -549,53 +574,65 @@ window.addEventListener('load', () => {
 
             if (screen && screen.getVideoTracks().length && screen.getVideoTracks()[0].readyState != 'ended') {
                 stopSharingScreen();
-            } else {
+            }
+
+            else {
                 shareScreen();
             }
         });
 
 
         //When record button is clicked
-        document.getElementById('record').addEventListener('click', (e) => {
-            /**
-             * Ask user what they want to record.
-             * Get the stream based on selection and start recording
-             */
-            if (!mediaRecorder || mediaRecorder.state == 'inactive') {
-                h.toggleModal('recording-options-modal', true);
-            } else if (mediaRecorder.state == 'paused') {
-                mediaRecorder.resume();
-            } else if (mediaRecorder.state == 'recording') {
-                mediaRecorder.stop();
-            }
-        });
+        // document.getElementById('record').addEventListener('click', (e) => {
+        //     /**
+        //      * Ask user what they want to record.
+        //      * Get the stream based on selection and start recording
+        //      */
+        //     if (!mediaRecorder || mediaRecorder.state == 'inactive') {
+        //         h.toggleModal('recording-options-modal', true);
+        //     }
+
+        //     else if (mediaRecorder.state == 'paused') {
+        //         mediaRecorder.resume();
+        //     }
+
+        //     else if (mediaRecorder.state == 'recording') {
+        //         mediaRecorder.stop();
+        //     }
+        // });
 
 
         //When user choose to record screen
-        document.getElementById('record-screen').addEventListener('click', () => {
-            h.toggleModal('recording-options-modal', false);
+        // document.getElementById('record-screen').addEventListener('click', () => {
+        //     h.toggleModal('recording-options-modal', false);
 
-            if (screen && screen.getVideoTracks().length) {
-                startRecording(screen);
-            } else {
-                h.shareScreen().then((screenStream) => {
-                    startRecording(screenStream);
-                }).catch(() => {});
-            }
-        });
+        //     if (screen && screen.getVideoTracks().length) {
+        //         startRecording(screen);
+        //     }
+
+        //     else {
+        //         h.shareScreen().then((screenStream) => {
+        //             startRecording(screenStream);
+        //         }).catch(() => { });
+        //     }
+        // });
 
 
         //When user choose to record own video
-        document.getElementById('record-video').addEventListener('click', () => {
-            h.toggleModal('recording-options-modal', false);
+        // document.getElementById('record-video').addEventListener('click', () => {
+        //     h.toggleModal('recording-options-modal', false);
 
-            if (myStream && myStream.getTracks().length) {
-                startRecording(myStream);
-            } else {
-                h.getUserFullMedia().then((videoStream) => {
-                    startRecording(videoStream);
-                }).catch(() => {});
-            }
-        });
+        //     if (myStream && myStream.getTracks().length) {
+        //         startRecording(myStream);
+        //     }
+
+        //     else {
+        //         h.getUserFullMedia().then((videoStream) => {
+        //             startRecording(videoStream);
+        //         }).catch(() => { });
+        //     }
+        // });
+
+        // console.log(users, 'users');
     }
 });

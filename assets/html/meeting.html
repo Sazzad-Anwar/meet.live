@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <!-- material icon -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+    <link rel="stylesheet" href="./assets/css/global.css">
+    <!-- all js files -->
+    <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">
+    </script>
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" referrerpolicy="no-referrer">
+    </script>
+    <script defer src="./assets/js/main.js"></script>
+    <title>Royex Live</title>
+</head>
+
+<body class="meeting">
+
+     <!-- modal for recording option -->
+     <!-- <div class="recording-modal" id="recording-option-modal">
+        <div class="card" style="width: 18rem">
+            <div class="card-body">
+                <h5 class="card-title">Card title</h5>
+                <p class="card-text">
+                    Some quick example text to build on the card title and make up the bulk
+                    of the card's content.
+                </p>
+                <a href="#" class="btn btn-primary">Go somewhere</a>
+            </div>
+        </div>
+    </div> -->
+    <div class="background pb-5 full-height">
+        <nav class="navbar navbar-expand-lg customNavbar">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="homePage.html">
+                    <h1 class="logo-in-meeting">royex.live</h1>
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon">
+                        <i class="material-icons fs-7 hover-shadow text-white">menu</i>
+                    </span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav ms-auto">
+                        <!-- <li class="nav-item"> <a href="" class="nav-link text-center px-4 mic d-flex flex-column justify-content-between align-items-center"> <div class="hover-scale"> <i class="material-icons fs-7 hover-shadow text-white">content_copy</i> <p class="text-white mb-0">Copy Link</p> </div> </a> </li> -->
+                        <li class="nav-item ">
+                            <a href=""
+                                class="nav-link text-center px-4 mic d-flex flex-column justify-content-between align-items-center">
+                                <div class="hover-scale">
+                                    <i class="material-icons fs-7 hover-shadow text-white">mic_none</i>
+                                    <p class="text-white mb-0">Mic</p>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="nav-item ">
+                            <a href=""
+                                class="nav-link text-center px-4 video d-flex flex-column justify-content-between align-items-center">
+                                <div class="hover-scale">
+                                    <i class="material-icons fs-7 hover-shadow text-white">videocam</i>
+                                    <p class="text-white mb-0">Video</p>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="nav-item ">
+                            <a href=""
+                                class="nav-link text-center px-4 invite d-flex flex-column justify-content-between align-items-center">
+                                <div class="hover-scale">
+                                    <i class="material-icons fs-7 hover-shadow text-white">people</i>
+                                    <p class="text-white mb-0">Invite</p>
+                                </div>
+                            </a>
+                        </li>
+                        
+                        <li class="nav-item ">
+                            <a href=""
+                                class="nav-link text-center px-4 share d-flex flex-column justify-content-between align-items-center">
+                                <div class="hover-scale">
+                                    <i class="material-icons fs-7 hover-shadow text-white">filter_none</i>
+                                    <p class="text-white mb-0">Share Screen</p>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a
+                                href=""
+                                class="
+                                    nav-link
+                                    text-center
+                                    px-4
+                                    share
+                                    d-flex
+                                    flex-column
+                                    justify-content-between
+                                    align-items-center
+                                "
+                            >
+                                <div class="hover-scale">
+                                    <i class="material-icons fs-7 hover-shadow text-white"
+                                        >graphic_eq</i
+                                    >
+                                    <p class="text-white mb-0">Screen Record</p>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="nav-item ">
+                            <a href=""
+                                class="nav-link text-center px-4 layout d-flex flex-column justify-content-between align-items-center">
+                                <div class="hover-scale">
+                                    <i class="material-icons fs-7 hover-shadow text-white">grid_on</i>
+                                    <p class="text-white mb-0">Layout</p>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="nav-item ">
+                            <a href="homePage.html"
+                                class="nav-link text-center px-4 button d-flex justify-content-center align-items-center">
+                                <button
+                                    class="btn btn-primary border-0 bg-danger p-2 d-flex justify-content-center align-items-center">
+                                    <i class="material-icons fs-7 hover-shadow text-white">power_settings_new</i>
+                                </button>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+        </nav>
+        <section class="mainBody bg-white row">
+            <div class="col-md-9 col-12 p-0">
+                <div class="video-portion p-3" id="videos">
+                    <div class="video">
+                        <div class="video-details">
+                            <p class="p-0 m-0 text-white">
+                                Namefdsafdsfasdfd
+                            </p>
+                            <i class="material-icons fs-7 hover-shadow text-white">mic_none</i>
+                            <i class="material-icons fs-7 hover-shadow text-white">crop_free</i>
+                        </div>
+                    </div>
+                    <div class="bg-success">
+                        <div class="video-details">
+                            <p class="p-0 m-0 text-white">
+                                Namefdsafdsfasdfd
+                            </p>
+                            <i class="material-icons fs-7 hover-shadow text-white">mic_none</i>
+                            <i class="material-icons fs-7 hover-shadow text-white">crop_free</i>
+                        </div>
+                    </div>
+                    <div class="bg-secondary">
+                        <div class="video-details">
+                            <p class="p-0 m-0 text-white">
+                                Namefdsafdsfasdfd
+                            </p>
+                            <i class="material-icons fs-7 hover-shadow text-white">mic_none</i>
+                            <i class="material-icons fs-7 hover-shadow text-white">crop_free</i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- right side -->
+            <div class="col-md-3 p-0">
+                <div class="chat-portion">
+                    <div class="participant-details bg-purple p-3">
+                        <h5 class="text-white mb-0">
+                            Participants
+                            <span class="fs-6">(19)</span>
+                        </h5>
+                    </div>
+                    <!-- participant list -->
+                    <div class="participant-list">
+                        <ul class="p-0 m-0">
+                            <li class="px-3 py-2 shadow-sm participant-area">
+                                <div class="name row">
+                                    <!-- <div class="d-flex my-1">
+                                        <div class="col-8 text-truncate">
+                                            <p class="p-0 m-0">Sazzad</p>
+                                        </div>
+                                        <div
+                                            class="
+                                                col-4
+                                                text-right
+                                                d-flex
+                                                user-audio-video-icons
+                                            "
+                                        >
+                                            <i
+                                                class="
+                                                    material-icons
+                                                    fs-7
+                                                    mx-1
+                                                    hover-shadow
+                                                    text-dark
+                                                    p-1
+                                                "
+                                                >videocam_off</i
+                                            >
+                                            <i
+                                                class="
+                                                    material-icons
+                                                    fs-7
+                                                    mx-1
+                                                    rounded
+                                                    hover-shadow
+                                                    text-dark
+                                                    p-1
+                                                "
+                                                >volume_off</i
+                                            >
+                                        </div>
+                                    </div> -->
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- chat area -->
+                    <div class="chat-message-area position-relative">
+                        <div class="chat bg-purple p-3">
+                            <h5 class="text-white mb-0">Chat</h5>
+                        </div>
+                        <div class="chat-body">
+                            <div class="message px-3 py-1" id="chat-messages">
+                                <!-- messages -->
+                            </div>
+                            <div class="input-area position-relative">
+                                <div class="form-group w-100 rounded-0">
+                                    <textarea
+                                        class="rounded-0 form-control"
+                                        rows="3"
+                                        id="chat-input"
+                                    ></textarea>
+                                </div>
+                                <div
+                                    class="
+                                        position-absolute
+                                        shadow-lg
+                                        bg-dark
+                                        circle
+                                        msg-send-button
+                                    "
+                                >
+                                    <i class="material-icons fs-7 hover-shadow text-white"
+                                        >send</i
+                                    >
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- footer -->
+        <div class="fixed-bottom bg-black" id="footer">
+            <nav class="navbar bottom">
+                <div class="container-fluid px-5">
+                    <a class="me-auto text-white hideOnMobile" href="/">
+                        <p class="hideOnMobile my-2">Back to Royex.live</p>
+                    </a>
+                    <a class="ms-auto text-white" href="/">
+                        <p class="my-2">Developed By Royex Technologies</p>
+                    </a>
+                </div>
+            </nav>
+        </div>
+    </div>
+</body>
+
+</html>

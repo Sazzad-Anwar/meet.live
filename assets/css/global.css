@@ -1,0 +1,556 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Questrial&display=swap');
+.btn:focus,
+.form-select:focus,
+[contenteditable].form-control:focus,
+[type='checkbox'].form-control:focus,
+[type='email'].form-control:focus,
+[type='password'].form-control:focus,
+[type='tel'].form-control:focus,
+[type='text'].form-control:focus,
+button:active,
+button:focus,
+custom-control-input:checked,
+custom-control-input:not(checked),
+input.form-control:focus,
+input[type='email']:focus,
+input[type='number']:focus,
+input[type='password']:focus,
+input[type='text']:focus,
+textarea.form-control:focus,
+textarea:focus {
+    box-shadow: inset 0 0 0 #ddd !important;
+}
+input:focus {
+    border-color: #ced4da !important;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins', sans-serif !important;
+}
+
+::-webkit-scrollbar {
+    display: none;
+}
+
+.full-height {
+    height: 100vh;
+}
+
+.copyIcon {
+    border-radius: 50%;
+    transition: all 0.3s ease-in-out;
+}
+.copyIcon:hover {
+    background-color: #d8d8d8;
+    cursor: pointer;
+}
+
+.hover-scale p,
+h5,
+p {
+    font-weight: normal;
+}
+
+.user-audio-video-icons i {
+    border-radius: 50% !important;
+    transition: all 0.3s ease !important;
+    cursor: pointer;
+}
+
+.user-audio-video-icons i.active {
+    background-color: #bbbbbb;
+}
+
+.notification {
+    padding: 10px 20px;
+    position: absolute;
+    right: 2%;
+    top: 20px;
+    opacity: 0;
+    color: #fff;
+    border-radius: 7px;
+    animation: popup 5s;
+}
+
+/* homepage */
+.background {
+    background-image: url('../images/bg.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    overflow: hidden;
+    position: relative;
+}
+
+.logo {
+    font-family: 'Questrial', sans-serif !important;
+    font-size: 8rem;
+    color: white;
+    text-align: center;
+    padding: 2rem 0;
+}
+
+.logo-in-meeting {
+    font-family: 'Questrial', sans-serif !important;
+    font-size: 2rem;
+    color: white;
+    text-align: center;
+}
+
+.bg-black {
+    background-color: #161616;
+}
+
+.bg-white {
+    background-color: #fff !important;
+}
+
+.bg-purple {
+    background-color: #622c80 !important;
+}
+
+.bg-blue {
+    background-color: #2376bc !important;
+}
+
+a {
+    text-decoration: none;
+}
+
+.custom-input-meeting-name,
+.custom-input-user-name {
+    padding-right: 2rem;
+}
+
+.custom-input-meeting-name::before,
+.custom-input-user-name::before {
+    content: '';
+    width: 8px;
+    padding: 4px;
+    margin-right: 2rem;
+}
+
+.custom-input-meeting-name::before {
+    background-color: #622c80;
+}
+
+.custom-input-user-name::before {
+    background-color: #2376bc;
+}
+
+.meeting {
+    color: #2376bc;
+    font-weight: 700;
+}
+.meeting-2 {
+    color: #622c80;
+    font-weight: 700;
+}
+
+.btn {
+    transition: all 0.2s ease-in-out !important;
+}
+.btn:hover,
+.hover-shadow:hover {
+    box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.8) !important;
+}
+.btn:active,
+.hover-scale:active {
+    transform: scale(0.95);
+}
+
+.hover-scale p {
+    font-size: 12px;
+}
+
+.joining-card {
+    margin-bottom: 5rem;
+}
+
+.hideOnMobile {
+    display: block;
+}
+
+.meeting-room-banner {
+    background-color: #9fc3e1;
+    margin: 0 10rem;
+}
+.url-link {
+    margin: 0 20rem;
+    padding: 15px 25px;
+    background-color: #fff;
+}
+
+.url-link img {
+    text-align: left;
+}
+
+.url-link-buttons {
+    margin: 0 30rem;
+}
+
+.customNavbar {
+    background: transparent;
+    margin-left: 3rem;
+    margin-right: 0;
+    padding: 0 !important;
+}
+
+.invite,
+.layout,
+.mic,
+.share,
+.video-icon {
+    position: relative;
+}
+
+.invite::after,
+.mic::after,
+.share::after {
+    content: '';
+    position: absolute;
+    top: 10px;
+    bottom: 10px;
+    right: 0;
+    height: 50%;
+    padding: 0.1px;
+    background-color: #bbbbbb;
+}
+
+.layout::after,
+.video-icon::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 10px;
+    right: 0;
+    height: 100%;
+    padding: 0.1px;
+    background-color: #bbbbbb;
+}
+
+.video-portion {
+    background-color: #000;
+}
+
+.chat-portion {
+    width: 350px;
+}
+
+.participant-details {
+    height: 30%;
+}
+
+.participant-list ul li {
+    list-style: none;
+}
+
+.message::-webkit-scrollbar,
+.participant-list::-webkit-scrollbar,
+.user-join-request::-webkit-scrollbar {
+    width: 0.4rem;
+}
+
+.message::-webkit-scrollbar-track,
+.participant-list::-webkit-scrollbar-track,
+.user-join-request::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 0 rgba(0, 0, 0, 0.3) !important;
+    -webkit-box-shadow: inset 0 0 0 rgba(0, 0, 0, 0.3) !important;
+    border-radius: 10px !important;
+}
+
+.message::-webkit-scrollbar-thumb,
+.participant-list::-webkit-scrollbar-thumb,
+.user-join-request::-webkit-scrollbar-thumb {
+    border-radius: 10px !important;
+    background-color: #1c2834 !important;
+    box-shadow: inset 0 0 0 rgba(0, 0, 0, 0.5) !important;
+    -webkit-box-shadow: inset 0 0 0 rgba(0, 0, 0, 0.5) !important;
+}
+
+/* .chat-message-area {
+    height: 70%;
+} */
+.chat-body {
+    height: 100%;
+}
+.message {
+    /* height: 70%; */
+    overflow-y: auto !important;
+}
+.input-area {
+    min-height: 25%;
+}
+
+.message-text-sender .message-text {
+    background-color: #e6e6e6;
+    width: 90%;
+    padding: 0.5rem 1rem;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 8px;
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+    margin: 0;
+}
+
+.my-video {
+    background-color: #fff;
+}
+
+.msg-send-button {
+    top: 20px;
+    right: 18px;
+    padding: 7px 6px 3px 7px;
+    margin: 0px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.message div {
+    padding: 5px 0;
+}
+
+.recording-modal {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.video-portion {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.local-video {
+    height: auto;
+    width: auto;
+}
+
+.material-icons {
+    padding: 5px;
+    transition: all 0.3s ease-in-out;
+    border-radius: 50%;
+}
+
+.material-icons:hover {
+    background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4));
+}
+.video-portion .video {
+    position: relative !important;
+}
+
+.video-portion .video .video-details {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 0;
+    /* top: 0; */
+    left: 0;
+    right: 0;
+    bottom: 0;
+    opacity: 1;
+    background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4));
+    transition: all 0.2s ease-in-out;
+}
+
+.video-portion .video .video-details p,
+.video-portion .video .video-details i {
+    margin: 0 2px;
+    padding: 5px 5px;
+    transition: all 0.3s ease-in-out;
+}
+/* .video-portion .video:hover .video-details {
+    opacity: 1;
+} */
+
+.video-portion .video .video-details i {
+    border-radius: 50%;
+}
+
+.video-portion .video .video-details p {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 60px;
+}
+
+.video-portion .video .video-details i:hover {
+    background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4));
+    cursor: pointer;
+}
+
+.static-view {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.static-view i {
+    font-size: 4rem;
+    padding: 20px;
+    background: linear-gradient(rgba(148, 148, 148, 0.4), rgba(0, 0, 0, 0.4));
+}
+
+#local {
+    border: 2px solid #216fb3;
+}
+
+#mute-audio-switch,
+#mute-video-switch,
+#check-camera-switch {
+    cursor: pointer;
+}
+
+#mute-audio-switch p,
+#mute-video-switch p,
+#check-camera-switch p {
+    padding: 0;
+    margin: 0;
+    font-size: 12px;
+}
+
+/* #check-camera-panel {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 100%;
+    width: 100%;
+} */
+
+.icon-active {
+    background: linear-gradient(rgba(148, 148, 148, 0.4), rgba(0, 0, 0, 0.4));
+}
+
+#check-camera {
+    height: 100%;
+    width: 100%;
+}
+
+#close-camera-check {
+    position: absolute;
+    top: 0;
+    right: 30%;
+    display: none;
+    cursor: pointer;
+}
+
+@media screen and (min-width: 320px) and (max-width: 767px) {
+    .logo {
+        font-size: 4rem;
+        padding: 2rem 0;
+    }
+
+    .navbar .bottom {
+        text-align: center;
+    }
+    .hideOnMobile {
+        display: none;
+    }
+
+    .meeting-room-banner {
+        background-color: #9fc3e1;
+        margin: 0 2rem;
+    }
+
+    .meeting-room-banner h3 {
+        font-size: 1rem;
+    }
+
+    .meeting-room-banner p {
+        font-size: 0.8rem;
+        padding: 0 2rem;
+    }
+    .url-link {
+        margin: 0 2rem;
+        padding: 15px 25px;
+        background-color: #fff;
+    }
+
+    .url-link img {
+        text-align: left;
+    }
+
+    .url-link-buttons {
+        margin: 0 2rem;
+    }
+
+    .nav-item a::after {
+        background-color: transparent;
+    }
+}
+
+@media screen and (min-width: 768px) and (max-width: 991px) {
+    .url-link {
+        margin: 0 7rem;
+    }
+    .meeting-room-banner {
+        margin: 0 3rem;
+    }
+    .logo {
+        padding: 0rem 0;
+    }
+    .nav-item a::after {
+        background-color: transparent;
+    }
+}
+
+@media screen and (min-width: 992px) and (max-width: 1199px) {
+    .url-link {
+        margin: 0 14rem;
+    }
+
+    .chat-message-area h5,
+    .participant-details h5 {
+        font-size: 1rem;
+    }
+
+    .msg-send-button i {
+        font-size: 15px;
+    }
+}
+@media screen and (min-width: 1200px) and (max-width: 1400px) {
+    .logo {
+        font-size: 5.5rem;
+        padding: 0rem 0;
+        margin: 0;
+    }
+    .card-title h1 {
+        font-size: 1.8rem;
+    }
+
+    #check-camera {
+        height: 250px;
+    }
+
+    .participant-list .participant-area {
+        min-height: 130px;
+        height: 130px;
+        overflow: auto;
+    }
+    .chat-message-area h5,
+    .participant-details h5 {
+        font-size: 1rem;
+    }
+
+    .msg-send-button i {
+        font-size: 15px;
+    }
+}
+@media screen and (min-width: 1401px) {
+    .participant-list .participant-area {
+        min-height: 200px;
+        overflow: auto;
+    }
+
+    .logo {
+        font-size: 6rem;
+        padding: 0.5rem 0;
+    }
+}
