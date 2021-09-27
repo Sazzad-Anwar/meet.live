@@ -124,16 +124,16 @@ export default {
                 //     credential: "QXg*c3G8*LCj"
                 // }
                 {
-                    urls: [
-                        "stun:stun1.l.google.com:19302",
-                        "stun:stun2.l.google.com:19302",
-                    ],
+                    urls: ["stun:stun.speakez.chat"]
                 },
                 {
+                    username: "sez",
+                    credential: "Qbb8ccQxBrV5VL8R",
                     urls: [
-                        "stun:global.stun.twilio.com:3478?transport=udp",
-                    ],
-                },
+                        "turn:turn.speakez.chat:3478?transport=udp",
+                        "turn:turn.speakez.chat:3478?transport=tcp"
+                    ]
+                }
             ]
         };
     },
