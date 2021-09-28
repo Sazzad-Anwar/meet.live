@@ -107,6 +107,11 @@ const stream = (socket) => {
 
         socket.to(data.room).emit('remove-person', { socketId: data.socketId, email: data.userEmail });
     })
+
+    socket.on('host-left-meeting', (data) => {
+        console.log(data)
+        socket.to(data.room).emit('host-left-meeting')
+    })
 };
 
 module.exports = stream;

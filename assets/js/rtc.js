@@ -123,10 +123,16 @@ window.addEventListener('load', () => {
             })
 
             socket.on("remove-person", data => {
-                console.log(data);
                 if (data.email === email) {
                     location.href = '/'
                 }
+            })
+
+            socket.on('host-left-meeting', () => {
+
+                removeSessionData()
+
+                location.href = '/'
             })
         });
 
@@ -141,6 +147,31 @@ window.addEventListener('load', () => {
                 console.error(`stream error: ${e}`);
             });
         }
+
+        function removeSessionData() {
+            sessionStorage.removeItem('isHost');
+            sessionStorage.removeItem('username');
+            sessionStorage.removeItem('video-mute');
+            sessionStorage.removeItem('audio-mute');
+            sessionStorage.removeItem('email');
+        }
+
+        function leaveMeeting() {
+            if (confirm('Leave the meeting') === true) {
+                if (isHost === 'true') {
+                    socket.emit('host-left-meeting', { room })
+                    removeSessionData()
+                    location.href = '/'
+                } else {
+                    location.href = '/'
+                }
+            }
+
+        }
+
+        $('.leaveMeeting').on('click', () => {
+            leaveMeeting()
+        })
 
         function removePerson(socketId) {
             let userEmail = (users.find(user => user.socketId === socketId)).email
