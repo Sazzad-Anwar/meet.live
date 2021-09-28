@@ -250,8 +250,8 @@ export default {
 
 
     maximiseStream(e) {
-        let id = (e.target.parentElement.children[0].id).split('-')[0];
-        let elem = document.getElementById(`${id}-video`)
+        let elem = (e.target.parentElement.parentElement.children[0]);
+        console.log(elem);
         elem.requestFullscreen() || elem.mozRequestFullScreen() || elem.webkitRequestFullscreen() || elem.msRequestFullscreen();
     },
 
