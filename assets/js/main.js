@@ -17,8 +17,10 @@ $(document)
 
         $('.background').css('min-height', `${mainHeight}px`)
         $('.mainBody').css('min-height', `${mainHeight}px`)
+        setTimeout(() => {
+            $('.chat-body .message').css('height', `${msgBodyHeight}px`)
+        }, 1500)
         $('.mainBody .video-portion').css('min-height', `${mainHeight}px`)
-        $('.chat-body .message').css('height', `${msgBodyHeight}px`)
         $('.chat-message-area').css('height', `${chatArea}px`);
 
         $('.navbar-toggler-icon').on('click', () => {
