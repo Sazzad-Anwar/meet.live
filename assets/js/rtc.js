@@ -491,6 +491,11 @@ window.addEventListener('load', () => {
             }
         });
 
+        document.addEventListener('click', (e) => {
+            if (e.target && e.target.classList.contains('personRemove')) {
+                removePerson(e.target.classList[0])
+            }
+        });
 
         //Chat textarea
         document.getElementById('chat-input').addEventListener('keypress', (e) => {

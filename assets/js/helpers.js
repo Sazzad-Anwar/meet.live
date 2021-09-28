@@ -234,14 +234,12 @@ export default {
 
         if (share) {
             shareIconElem.setAttribute('title', 'Stop sharing screen');
-            shareIconElem.children[0].classList.add('text-primary');
-            shareIconElem.children[0].classList.remove('text-white');
+            $('#share-screen i').text('cast')
         }
 
         else {
             shareIconElem.setAttribute('title', 'Share screen');
-            shareIconElem.children[0].classList.add('text-white');
-            shareIconElem.children[0].classList.remove('text-primary');
+            $('#share-screen i').text('filter_none')
         }
     },
 
@@ -252,24 +250,26 @@ export default {
 
 
     maximiseStream(e) {
-        let elem = e.target.parentElement.previousElementSibling;
-
+        let id = (e.target.parentElement.children[0].id).split('-')[0];
+        let elem = document.getElementById(`${id}-video`)
         elem.requestFullscreen() || elem.mozRequestFullScreen() || elem.webkitRequestFullscreen() || elem.msRequestFullscreen();
     },
 
 
     singleStreamToggleMute(e) {
         if (e.target.classList.contains('fa-microphone')) {
-            e.target.parentElement.previousElementSibling.muted = true;
-            // e.target.classList.add('fa-microphone-slash');
+            let id = (e.target.parentElement.children[0].id).split('-')[0];
+            let elem = document.getElementById(`${id}-video`)
+            elem.muted = true;
             e.target.classList.remove('fa-microphone');
             e.target.innerText = 'mic_off'
         }
 
         else {
-            e.target.parentElement.previousElementSibling.muted = false;
+            let id = (e.target.parentElement.children[0].id).split('-')[0];
+            let elem = document.getElementById(`${id}-video`)
+            elem.muted = false;
             e.target.classList.add('fa-microphone');
-            // e.target.classList.remove('fa-microphone-slash');
             e.target.innerText = 'mic_none'
         }
     },
