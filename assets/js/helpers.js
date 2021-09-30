@@ -312,9 +312,9 @@ export default {
                 $('.video video')[i].style.width = "100%";
                 $('.video video')[i].style.height = "inherit";
                 if (totalRemoteVideosDesktop <= 2) {
-                    $('.video')[i].style.height = videoHeight / 2 + "px"
+                    $('.video')[i].style.height = (videoHeight / 2) + "px"
                 } else {
-                    $('.video')[i].style.height = "100%";
+                    $('.video')[i].style.height = "auto";
                 }
             }
 

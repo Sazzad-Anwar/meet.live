@@ -351,7 +351,7 @@ window.addEventListener('load', () => {
                         let remoteVideo = document.createElement('video');
                         remoteVideo.id = `${partnerName}-video`;
                         remoteVideo.srcObject = str;
-                        remoteVideo.style.border = "2px solid #622c80"
+                        remoteVideoDiv.style.border = "2px solid #622c80"
                         remoteVideo.autoplay = true;
                         remoteVideo.className = 'remote-video';
                         let videoDetails = document.createElement('div');
@@ -531,14 +531,6 @@ window.addEventListener('load', () => {
                 console.error(e);
             };
         }
-
-        document.addEventListener('click', (e) => {
-            if (e.target && e.target.classList.contains('personRemove')) {
-                let classes = $('.personRemove').attr("class");
-                let socketId = classes.split(' ')[0]
-                removePerson(socketId)
-            }
-        });
 
         document.addEventListener('click', (e) => {
             if (e.target && e.target.classList.contains('personRemove')) {
