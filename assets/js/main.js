@@ -294,11 +294,12 @@ fnBrowserDetect()
 
 
 function shareToApp() {
+    let link = $('#meeting-link').text()
     if (navigator.share) {
         navigator.share({
             title: 'Royex.live',
             text: 'You are invited to join in a meeting.',
-            url: window.location.href,
+            url: link ? link : window.location.href,
         })
             .then(() => console.log('Successful share'))
             .catch((error) => console.log('Error sharing', error));
