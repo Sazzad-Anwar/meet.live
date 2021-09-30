@@ -235,6 +235,7 @@ setTimeout(() => {
 
         $('#footer a').remove()
         $('#footer').addClass('footer-bg');
+        $('#footer').css('height', '10%');
         $('#footer .navbar').addClass('p-0')
         $('#footer .container-fluid').removeClass('px-5')
         $('#footer .container-fluid').append(toggleMute)

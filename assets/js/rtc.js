@@ -347,7 +347,7 @@ window.addEventListener('load', () => {
                     function addUserVideo() {
                         let remoteVideoDiv = document.createElement('div');
                         remoteVideoDiv.id = partnerName;
-                        remoteVideoDiv.className = "video";
+                        remoteVideoDiv.className = "video d-flex";
                         let remoteVideo = document.createElement('video');
                         remoteVideo.id = `${partnerName}-video`;
                         remoteVideo.srcObject = str;
