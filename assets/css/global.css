@@ -80,7 +80,7 @@ p {
     background-image: url('../images/bg.png');
     background-size: cover;
     background-repeat: no-repeat;
-    overflow: hidden;
+    overflow: auto;
     position: relative;
 }
 
@@ -450,6 +450,14 @@ a {
     cursor: pointer;
 }
 
+#mobileHeader {
+    display: none;
+}
+
+.footer-bg {
+    background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('../images/bg.png');
+}
+
 @media screen and (min-width: 320px) and (max-width: 767px) {
     .logo {
         font-size: 4rem;
@@ -465,7 +473,7 @@ a {
 
     .meeting-room-banner {
         background-color: #9fc3e1;
-        margin: 0 2rem;
+        margin: 0 0rem;
     }
 
     .meeting-room-banner h3 {
@@ -477,7 +485,7 @@ a {
         padding: 0 2rem;
     }
     .url-link {
-        margin: 0 2rem;
+        margin: 0 0rem;
         padding: 15px 25px;
         background-color: #fff;
     }
@@ -490,8 +498,49 @@ a {
         margin: 0 2rem;
     }
 
-    .nav-item a::after {
+    .meeting-room-banner {
+        padding-left: 7px;
+        padding-right: 7px;
+    }
+
+    .meeting-room-banner p .nav-item a::after {
         background-color: transparent;
+    }
+
+    .mainBody .col-md-3 {
+        display: none;
+    }
+
+    #mobileHeader {
+        display: block;
+    }
+
+    #footer .navbar-bottom .container-fluid {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+    }
+
+    #footer a::after {
+        all: unset;
+    }
+
+    #footer a {
+        margin-left: unset !important;
+        text-align: center !important;
+    }
+
+    #footer p {
+        font-size: 13px !important;
+    }
+
+    .video:first-child,
+    #local {
+        width: 100%;
+    }
+    .customNavbar {
+        margin-left: 0rem !important;
     }
 }
 
@@ -507,6 +556,9 @@ a {
     }
     .nav-item a::after {
         background-color: transparent;
+    }
+    #footer p {
+        font-size: 10px !important;
     }
 }
 

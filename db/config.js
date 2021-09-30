@@ -22,11 +22,24 @@ const connectDB = async (databaseName) => {
 
 
         } else {
-            const conn = await mongoose.connect('mongodb+srv://sazzadzihan12345:sazzadzihan123456@cluster0.j2ebl.mongodb.net/myFirstDatabase?retryWrites=true&w=majority', {
-                useUnifiedTopology: true,
-                useNewUrlParser: true,
-            });
-            console.log(`MongoDB Connected: ${conn.connection.host}`.green.underline);
+
+            if (process.env.DOCKER_RUNNING === 'true') {
+                const conn = await mongoose.connect(`mongodb://${process.env.MONGO_INITDB_ROOT_USERNAME}:${process.env.MONGO_INITDB_ROOT_PASSWORD}@${process.env.MONGO_HOST}:${process.env.MONGO_PORT}/?authSource=admin`, {
+                    useUnifiedTopology: true,
+                    useNewUrlParser: true,
+                });
+                console.log(`MongoDB Connected: ${conn.connection.host}`.green.underline);
+
+            } else {
+
+                const conn = await mongoose.connect(process.env.MONGO_URI, {
+                    useUnifiedTopology: true,
+                    useNewUrlParser: true,
+                });
+
+                console.log(`MongoDB Connected: ${conn.connection.host}`.green.underline);
+            }
+
         }
 
     } catch (error) {

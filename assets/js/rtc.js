@@ -21,6 +21,7 @@ window.addEventListener('load', () => {
 
         for (let i = 0; i < commElem.length; i++) {
             commElem[i].attributes.removeNamedItem('hidden');
+            commElem[i].classList.add('meeting-room');
             $('#footer a.hideOnMobile').attr('onclick', "leaveMeeting()");
             $('#footer a.hideOnMobile').attr('href', 'javascript:void(0)');
         }
@@ -131,11 +132,24 @@ window.addEventListener('load', () => {
             socket.on('host-left-meeting', () => {
 
                 removeSessionData()
+                notification('Meeting will be ended after 5 Seconds')
+                setTimeout(() => {
+                    location.href = '/'
+                }, 5000)
 
-                location.href = '/'
             })
         });
 
+        function notification(text) {
+            $('body').append(`
+                <div class="notification shadow-lg bg-purple">${text}</div>
+            `)
+            $('.notification').css('opacity', '1');
+
+            setTimeout(() => {
+                $('.notification').css('opacity', '0');
+            }, 3000)
+        }
 
         function getAndSetUserStream() {
             h.getUserFullMedia().then((stream) => {
@@ -325,6 +339,10 @@ window.addEventListener('load', () => {
                     participantName(username);
                     addNewUserInList(remoteUserName, partnerName)
                     $('#totalUser').text(`(${$('.video').length - 1})`)
+                    if (window.innerWidth < 768) {
+                        $('.mobileHeader').text(`Joined ${$('.video').length - 1}`)
+                        $('.mobileHeader').addClass('badge bg-danger')
+                    }
 
                     function addUserVideo() {
                         let remoteVideoDiv = document.createElement('div');
@@ -619,7 +637,7 @@ window.addEventListener('load', () => {
 
 
         //When record button is clicked
-        // document.getElementById('record').addEventListener('click', (e) => {
+        // document.getElementById('record').addEventListener('click', () => {
         //     /**
         //      * Ask user what they want to record.
         //      * Get the stream based on selection and start recording
@@ -638,7 +656,7 @@ window.addEventListener('load', () => {
         // });
 
 
-        //When user choose to record screen
+        // // When user choose to record screen
         // document.getElementById('record-screen').addEventListener('click', () => {
         //     h.toggleModal('recording-options-modal', false);
 
@@ -654,7 +672,7 @@ window.addEventListener('load', () => {
         // });
 
 
-        //When user choose to record own video
+        // // When user choose to record own video
         // document.getElementById('record-video').addEventListener('click', () => {
         //     h.toggleModal('recording-options-modal', false);
 

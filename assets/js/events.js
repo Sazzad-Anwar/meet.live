@@ -120,7 +120,10 @@ window.addEventListener('load', () => {
         let name = document.querySelector('#username').value;
         let email = document.querySelector('#userEmail').value;
 
-        if (name && email) {
+        if (name && email && !email.includes('@')) {
+            document.querySelector('#username-error').innerHTML = "This is not a real email";
+        }
+        else {
             //remove error message, if any
             document.querySelector('#username-error').innerHTML = "";
             document.querySelector('#userEmail-error').innerHTML = "";

@@ -6,7 +6,6 @@ $(document)
         let participantDetails = $('.participant-details').outerHeight();
         let participantList = $('.participant-list').outerHeight();
         let chatTitle = $('.chat').outerHeight();
-        console.log(window.innerHeight, navHeight, footerHeight);
         let mainHeight = window.innerHeight - (footerHeight + navHeight);
         let chatArea = window.innerHeight - (navHeight + participantDetails + participantList)
         let msgBodyHeight = chatArea - (msgInputHeight + chatTitle + footerHeight);
@@ -227,3 +226,68 @@ $('#close-camera-check').on('click', () => {
     $('#check-camera-switch i').removeClass('icon-active')
     $('#form-element').show();
 });
+
+setTimeout(() => {
+    if (window.innerWidth < 768 && $('.room-comm').hasClass('meeting-room')) {
+        let toggleMute = $('#toggle-mute')
+        let toggleVideo = $('#toggle-video')
+        let leaveBtn = $('.leaveMeeting')
+
+        $('#footer a').remove()
+        $('#footer').addClass('footer-bg');
+        $('#footer .navbar').addClass('p-0')
+        $('#footer .container-fluid').removeClass('px-5')
+        $('#footer .container-fluid').append(toggleMute)
+        $('#footer .container-fluid').append(toggleVideo)
+        $('#footer .container-fluid').append(leaveBtn)
+    }
+}, 1000)
+
+function fnBrowserDetect() {
+
+    let userAgent = navigator.userAgent;
+    let browserName;
+
+    if (userAgent.match(/chrome|chromium|crios/i)) {
+        browserName = "chrome";
+    } else if (userAgent.match(/firefox|fxios/i)) {
+        browserName = "firefox";
+        // $('#browser-alert').click()
+    } else if (userAgent.match(/safari/i)) {
+        browserName = "safari";
+        // $('#browser-alert').click()
+    } else if (userAgent.match(/opr\//i)) {
+        browserName = "opera";
+        // $('#browser-alert').click()
+    } else if (userAgent.match(/edg/i)) {
+        browserName = "edge";
+        // $('#browser-alert').click()
+    } else {
+        browserName = "No browser detection";
+    }
+
+    $('.background ').append(`
+        <button type="button" hidden id="browser-alert" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Launch static backdrop modal</button>
+        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                    <h5 class="modal-title meeting" id="staticBackdropLabel">Browser Alert !</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                    You are using <b>${browserName}</b>.
+                    Please move to <b>Chrome/Chromium/Crios</b>  browser for better and smooth experience.
+                    </div>
+                        <div class="modal-footer">
+                        <a href="/" class="btn bg-purple text-white" data-bs-dismiss="modal">Close</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        `)
+
+    browserName !== "chrome" ? $('#browser-alert').click() : ''
+}
+
+fnBrowserDetect()

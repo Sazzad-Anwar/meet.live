@@ -12,6 +12,10 @@ export default {
             document.getElementById(elemId).remove();
             document.getElementById(`${elemId}-userName`).remove();
             $('#totalUser').text(`(${$('.video').length - 1})`)
+            if (window.innerWidth < 768) {
+                $('.mobileHeader').text(`Joined ${$('.video').length - 1}`)
+                $('.mobileHeader').addClass('badge bg-danger')
+            }
             this.adjustVideoElemSize();
         }
     },
@@ -112,17 +116,6 @@ export default {
     getIceServer() {
         return {
             iceServers: [
-                // {
-                //     urls: ["stun:stun.royex.io"]
-                // },
-                // {
-                //     urls: [
-                //         "turn:turn.royex.io:3478?transport=udp",
-                //         "turn:turn.royex.io:5349?transport=tcp"
-                //     ],
-                //     username: "root",
-                //     credential: "QXg*c3G8*LCj"
-                // }
                 {
                     urls: ["stun:stun.speakez.chat"]
                 },
@@ -230,16 +223,17 @@ export default {
 
 
     toggleShareIcons(share) {
-        let shareIconElem = document.querySelector('#share-screen');
 
         if (share) {
-            shareIconElem.setAttribute('title', 'Stop sharing screen');
             $('#share-screen i').text('cast')
+            $('#share-screen i .hover-scale').addClass('icon-active')
+            $('#share-screen p').text('Screen is sharing')
         }
 
         else {
-            shareIconElem.setAttribute('title', 'Share screen');
             $('#share-screen i').text('filter_none')
+            $('#share-screen i .hover-scale').removeClass('icon-active')
+            $('#share-screen p').text('Share screen')
         }
     },
 
@@ -258,8 +252,7 @@ export default {
 
     singleStreamToggleMute(e) {
         if (e.target.classList.contains('fa-microphone')) {
-            let id = (e.target.parentElement.children[0].id).split('-')[0];
-            let elem = document.getElementById(`${id}-video`)
+            let elem = (e.target.parentElement.parentElement.children[0]);
             elem.muted = true;
             e.target.classList.remove('fa-microphone');
             e.target.innerText = 'mic_off'
@@ -267,7 +260,7 @@ export default {
 
         else {
             let id = (e.target.parentElement.children[0].id).split('-')[0];
-            let elem = document.getElementById(`${id}-video`)
+            let elem = (e.target.parentElement.parentElement.children[0]);
             elem.muted = false;
             e.target.classList.add('fa-microphone');
             e.target.innerText = 'mic_none'
@@ -311,29 +304,37 @@ export default {
     adjustVideoElemSize() {
         let elem = $('.video');
         let totalRemoteVideosDesktop = elem.length;
-        // $('.video-portion').css('grid-template-columns', `repeat(${totalRemoteVideosDesktop}, ${1020 / totalRemoteVideosDesktop}px)`)
-        // $('.video-portion').css('grid-template-rows', `repeat(${totalRemoteVideosDesktop}, ${495 / totalRemoteVideosDesktop}px)`)
 
-        let newWidth = totalRemoteVideosDesktop <= 2 ? '50%' : (
-            totalRemoteVideosDesktop <= 3 ? '33.33%' : (
-                totalRemoteVideosDesktop <= 8 ? '25%' : (
-                    totalRemoteVideosDesktop <= 15 ? '20%' : (
-                        totalRemoteVideosDesktop <= 18 ? '16%' : (
-                            totalRemoteVideosDesktop <= 23 ? '15%' : (
-                                totalRemoteVideosDesktop <= 32 ? '12%' : '10%'
+        if (window.innerWidth < 768) {
+            let newWidth = totalRemoteVideosDesktop === 1 ? '100%' : '50%'
+            for (let i = 0; i < totalRemoteVideosDesktop; i++) {
+                elem[i].style.width = newWidth;
+                $('.video video')[i].style.width = '100%';
+                $('.video').css('height', "100%")
+            }
+        } else {
+
+            let newWidth = totalRemoteVideosDesktop <= 2 ? '50%' : (
+                totalRemoteVideosDesktop <= 3 ? '33.33%' : (
+                    totalRemoteVideosDesktop <= 8 ? '25%' : (
+                        totalRemoteVideosDesktop <= 15 ? '20%' : (
+                            totalRemoteVideosDesktop <= 18 ? '16%' : (
+                                totalRemoteVideosDesktop <= 23 ? '15%' : (
+                                    totalRemoteVideosDesktop <= 32 ? '12%' : '10%'
+                                )
                             )
                         )
                     )
                 )
-            )
-        );
+            );
 
-
-        for (let i = 0; i < totalRemoteVideosDesktop; i++) {
-            elem[i].style.width = newWidth;
-            $('.video video').css('width', "100%")
-            $('.video').css('height', "100%")
+            for (let i = 0; i < totalRemoteVideosDesktop; i++) {
+                elem[i].style.width = newWidth;
+                $('.video video')[i].style.width = '100%';
+                $('.video').css('height', "100%")
+            }
         }
+
     },
 
 
