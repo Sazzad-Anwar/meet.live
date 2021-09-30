@@ -471,6 +471,32 @@ a {
         display: none;
     }
 
+    .navbar-nav {
+        display: flex !important;
+        flex-direction: row !important;
+    }
+
+    .mainBody {
+        width: 100vw;
+        padding: 0px;
+        margin: 0px;
+    }
+
+    video {
+        -webkit-transform: scaleX(-1);
+        transform: scaleX(-1);
+    }
+
+    .invite::after,
+    .mic::after,
+    .share::after {
+        all: unset;
+    }
+
+    .container-fluid {
+        padding-right: 0px;
+    }
+
     .meeting-room-banner {
         background-color: #9fc3e1;
         margin: 0 0rem;

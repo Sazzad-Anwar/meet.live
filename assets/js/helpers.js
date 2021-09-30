@@ -304,14 +304,21 @@ export default {
     adjustVideoElemSize() {
         let elem = $('.video');
         let totalRemoteVideosDesktop = elem.length;
-
+        let videoHeight = $('.video-portion').outerHeight();
         if (window.innerWidth < 768) {
-            let newWidth = totalRemoteVideosDesktop === 1 ? '100%' : '50%'
+            let newWidth = totalRemoteVideosDesktop <= 2 ? '100%' : '50%';
             for (let i = 0; i < totalRemoteVideosDesktop; i++) {
                 elem[i].style.width = newWidth;
-                $('.video video')[i].style.width = '100%';
-                $('.video').css('height', "100%")
+                $('.video video')[i].style.width = "100%";
+                $('.video video')[i].style.height = "inherit";
+                if (totalRemoteVideosDesktop <= 2) {
+                    $('.video')[i].style.height = videoHeight / 2 + "px"
+                } else {
+                    $('.video')[i].style.height = "100%";
+                }
             }
+
+
         } else {
 
             let newWidth = totalRemoteVideosDesktop <= 2 ? '50%' : (
