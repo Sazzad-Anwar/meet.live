@@ -454,6 +454,11 @@ a {
     display: none;
 }
 
+video {
+    -webkit-transform: scaleX(-1);
+    transform: scaleX(-1);
+}
+
 .footer-bg {
     background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('../images/bg.png');
 }
@@ -481,11 +486,6 @@ a {
         width: 100vw;
         padding: 0px;
         margin: 0px;
-    }
-
-    video {
-        -webkit-transform: scaleX(-1);
-        transform: scaleX(-1);
     }
 
     .invite::after,

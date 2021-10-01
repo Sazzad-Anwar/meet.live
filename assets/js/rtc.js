@@ -125,6 +125,7 @@ window.addEventListener('load', () => {
 
             socket.on("remove-person", data => {
                 if (data.email === email) {
+                    removeSessionData()
                     location.href = '/'
                 }
             })
@@ -134,6 +135,7 @@ window.addEventListener('load', () => {
                 removeSessionData()
                 notification('Meeting will be ended after 5 Seconds')
                 setTimeout(() => {
+                    removeSessionData()
                     location.href = '/'
                 }, 5000)
 
@@ -177,6 +179,7 @@ window.addEventListener('load', () => {
                     removeSessionData()
                     location.href = '/'
                 } else {
+                    removeSessionData()
                     location.href = '/'
                 }
             }
@@ -213,32 +216,18 @@ window.addEventListener('load', () => {
         }
 
         function videoMute(muted) {
-            if (muted) {
-                const data = {
-                    room: room,
-                    socketId: socketId,
-                    sender: username,
-                    status: 1
-                }
-                socket.on('toggle-video', (data) => {
 
-                    h.toggleVideo(data);
-                });
-                h.toggleVideo(data, 'local')
-                socket.emit('toggle-video', data)
-            } else {
-                const data = {
-                    room: room,
-                    socketId: socketId,
-                    sender: username,
-                    status: 0
-                }
-                socket.on('toggle-video', (data) => {
-                    h.toggleVideo(data, 'local');
-                });
-                h.toggleVideo(data)
-                socket.emit('toggle-video', data)
+            const data = {
+                room: room,
+                socketId: socketId,
+                sender: username,
+                status: muted ? 1 : 0
             }
+            h.toggleVideo(data, 'local')
+            socket.emit('toggle-video', data)
+            socket.on('toggle-video', (data) => {
+                h.toggleVideo(data, 'remote');
+            });
         }
 
         function sendMsg(msg) {

@@ -141,8 +141,8 @@ export default {
                 $(`#${data.socketId}-static-view`).addClass('invisible')
                 $(`#${data.socketId}-static-view`).removeClass('visible')
             }
-        }
-        else {
+
+        } else {
             if (data.status === 1) {
                 $(`#local-static-view`).removeClass('invisible')
                 $(`#local-static-view`).addClass('visible')
@@ -337,8 +337,9 @@ export default {
 
             for (let i = 0; i < totalRemoteVideosDesktop; i++) {
                 elem[i].style.width = newWidth;
-                $('.video video')[i].style.width = '100%';
-                $('.video').css('height', "100%")
+                $('.video video')[i].style.width = "100%";
+                $('.video video')[i].style.height = "inherit";
+                $('.video')[i].style.height = "auto";
             }
         }
 

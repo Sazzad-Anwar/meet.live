@@ -1,6 +1,6 @@
 {
     "name": "royex-live",
-    "version": "1.0.4",
+    "version": "1.0.5",
     "description": "Royex authorized video conference application with WebRTC",
     "main": "app.js",
     "scripts": {
