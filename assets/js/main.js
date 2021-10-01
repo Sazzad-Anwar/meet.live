@@ -227,6 +227,11 @@ $('#close-camera-check').on('click', () => {
     $('#form-element').show();
 });
 
+$('.showJoinMeetingCard').on('click', () => {
+    $('.joinMeetingRoom').toggleClass('hideOnMobile')
+    $('.createMeetingRoom').toggleClass('hideOnMobile')
+})
+
 setTimeout(() => {
     if (window.innerWidth < 768 && $('.room-comm').hasClass('meeting-room')) {
         let toggleMute = $('#toggle-mute')
@@ -249,7 +254,7 @@ function fnBrowserDetect() {
     let userAgent = navigator.userAgent;
     let browserName;
 
-    if (userAgent.match(/chrome|chromium|crios/i)) {
+    if (userAgent.match(/chrome|chromium/i)) {
         browserName = "chrome";
     } else if (userAgent.match(/firefox|fxios/i)) {
         browserName = "firefox";

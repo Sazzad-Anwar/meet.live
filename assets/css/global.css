@@ -454,6 +454,10 @@ a {
     display: none;
 }
 
+.hideOnDesktop {
+    display: none;
+}
+
 video {
     -webkit-transform: scaleX(-1);
     transform: scaleX(-1);
@@ -466,7 +470,7 @@ video {
 @media screen and (min-width: 320px) and (max-width: 767px) {
     .logo {
         font-size: 4rem;
-        padding: 2rem 0;
+        padding: 1rem 0;
     }
 
     .navbar .bottom {
@@ -474,6 +478,10 @@ video {
     }
     .hideOnMobile {
         display: none;
+    }
+
+    .hideOnDesktop {
+        display: block;
     }
 
     .navbar-nav {
@@ -486,6 +494,14 @@ video {
         width: 100vw;
         padding: 0px;
         margin: 0px;
+    }
+
+    .createMeetingRoom .card.mb-5 {
+        margin-bottom: unset !important;
+    }
+
+    .joining-card {
+        margin-bottom: unset;
     }
 
     .invite::after,
