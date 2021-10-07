@@ -339,7 +339,7 @@ export default {
                 elem[i].style.width = newWidth;
                 $('.video video')[i].style.width = "100%";
                 $('.video video')[i].style.height = "inherit";
-                $('.video')[i].style.height = "auto";
+                $('.video')[i].style.height = 'auto';
             }
         }
 

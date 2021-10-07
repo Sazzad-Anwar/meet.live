@@ -2,25 +2,18 @@ $(document)
     .ready(function () {
         let footerHeight = $('#footer').outerHeight();
         let navHeight = $('#navbarSupportedContent').outerHeight();
-        let msgInputHeight = $('.input-area').outerHeight();
-        let participantDetails = $('.participant-details').outerHeight();
-        let participantList = $('.participant-list').outerHeight();
-        let chatTitle = $('.chat').outerHeight();
         let mainHeight = window.innerHeight - (footerHeight + navHeight);
-        let chatArea = window.innerHeight - (navHeight + participantDetails + participantList)
-        let msgBodyHeight = chatArea - (msgInputHeight + chatTitle + footerHeight);
-        let chatMessagesHeight = $('#chat-messages').outerHeight()
-        $('#chat-messages').stop().animate({
-            scrollTop: $('#chat-messages')[0].scrollHeight
-        }, 800);
 
-        $('.background').css('min-height', `${mainHeight}px`)
-        $('.mainBody').css('min-height', `${mainHeight}px`)
-        setTimeout(() => {
-            $('.chat-body .message').css('height', `${msgBodyHeight}px`)
-        }, 1500)
-        $('.mainBody .video-portion').css('min-height', `${mainHeight}px`)
-        $('.chat-message-area').css('height', `${chatArea}px`);
+        // $('#chat-messages').stop().animate({
+        //     scrollTop: $('#chat-messages')[0].scrollHeight
+        // }, 800);
+
+        $('.background').css('min-height', `${mainHeight - footerHeight}px`)
+        $('.mainBody').css('min-height', `${mainHeight - footerHeight}px`)
+
+        $('.mainBody .video-portion').css('min-height', `${mainHeight - footerHeight - 10}px`)
+        $('.chat-portion').css('height', `${mainHeight - footerHeight}px`)
+        // $('.chat-message-area').css('height', `${mainHeight - footerHeight}px`)
 
         $('.navbar-toggler-icon').on('click', () => {
             if ($('.navbar-toggler-icon i').text() === 'menu') {
@@ -272,7 +265,7 @@ function fnBrowserDetect() {
         browserName = "No browser detection";
     }
 
-    $('.background ').append(`
+    $('.background').append(`
         <button type="button" hidden id="browser-alert" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Launch static backdrop modal</button>
         <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
@@ -291,9 +284,26 @@ function fnBrowserDetect() {
                 </div>
             </div>
         </div>
-        `)
+    `)
 
-    browserName !== "chrome" ? $('#browser-alert').click() : ''
+    switch (browserName) {
+        case 'firefox':
+            $('#browser-alert').click()
+            break;
+        case 'safari':
+            $('#browser-alert').click()
+            break;
+        case 'opera':
+            $('#browser-alert').click()
+            break;
+        case 'edge':
+            $('#browser-alert').click()
+            break;
+        default:
+            break;
+    }
+
+
 }
 
 fnBrowserDetect()

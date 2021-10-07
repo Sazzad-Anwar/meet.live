@@ -540,6 +540,18 @@ window.addEventListener('load', () => {
             }
         });
 
+        document.getElementById('msg-send-button').addEventListener('click', (e) => {
+            if ((document.getElementById('chat-input').value.trim())) {
+                e.preventDefault();
+
+                sendMsg(document.getElementById('chat-input').value);
+
+                setTimeout(() => {
+                    document.getElementById('chat-input').value = '';
+                }, 50);
+            }
+        });
+
         if (isVideoMuted === 'true') {
             setTimeout(() => {
                 document.getElementById('toggle-video').click()
@@ -608,10 +620,12 @@ window.addEventListener('load', () => {
             e.preventDefault();
 
             if (screen && screen.getVideoTracks().length && screen.getVideoTracks()[0].readyState != 'ended') {
+                $('video').css('transform', 'scaleX(-1);')
                 stopSharingScreen();
             }
 
             else {
+                $('video').css('transform', 'scaleX(1);')
                 shareScreen();
             }
         });
