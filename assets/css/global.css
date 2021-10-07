@@ -236,7 +236,7 @@ a {
 }
 
 .chat-portion {
-    width: 350px;
+    width: auto;
 }
 
 .participant-list ul li {
@@ -646,6 +646,18 @@ video {
     .msg-send-button i {
         font-size: 15px;
     }
+
+    .chat-portion .chat-message-area {
+        height: 32.6rem;
+    }
+
+    .room-comm {
+        overflow: hidden;
+    }
+
+    .participant-list .participant-area {
+        height: 27vh;
+    }
 }
 @media screen and (min-width: 1401px) and (max-width: 1599px) {
     .participant-list .participant-area {
@@ -656,6 +668,18 @@ video {
     .logo {
         font-size: 6rem;
         padding: 0.5rem 0;
+    }
+
+    .chat-portion .chat-message-area {
+        height: 32.6rem;
+    }
+
+    .room-comm {
+        overflow: hidden;
+    }
+
+    .participant-list .participant-area {
+        height: 27vh;
     }
 }
 

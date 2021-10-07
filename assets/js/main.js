@@ -9,7 +9,7 @@ $(document)
         // }, 800);
 
         $('.background').css('min-height', `${mainHeight - footerHeight}px`)
-        $('.mainBody').css('min-height', `${mainHeight - footerHeight}px`)
+        $('.mainBody').css('min-height', `${mainHeight - footerHeight - 10}px`)
 
         $('.mainBody .video-portion').css('min-height', `${mainHeight - footerHeight - 10}px`)
         $('.chat-portion').css('height', `${mainHeight - footerHeight}px`)
