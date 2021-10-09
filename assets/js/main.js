@@ -8,10 +8,12 @@ $(document)
         //     scrollTop: $('#chat-messages')[0].scrollHeight
         // }, 800);
 
-        $('.background').css('min-height', `${mainHeight - footerHeight}px`)
-        $('.mainBody').css('min-height', `${mainHeight - footerHeight - 10}px`)
+        console.log(window.innerHeight, footerHeight, navHeight, mainHeight);
 
-        $('.mainBody .video-portion').css('min-height', `${mainHeight - footerHeight - 10}px`)
+        $('.background').css('min-height', `${mainHeight - footerHeight}px`)
+        $('.mainBody').css('min-height', `${mainHeight}px`)
+
+        $('.mainBody .video-portion').css('min-height', `${mainHeight}px`)
         $('.chat-portion').css('height', `${mainHeight - footerHeight}px`)
         // $('.chat-message-area').css('height', `${mainHeight - footerHeight}px`)
 
@@ -306,7 +308,7 @@ function fnBrowserDetect() {
 
 }
 
-fnBrowserDetect()
+// fnBrowserDetect()
 
 
 function shareToApp() {
