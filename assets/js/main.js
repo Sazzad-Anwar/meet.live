@@ -30,6 +30,11 @@ $(document)
         let roomName = meetingId?.join('-')
 
         $('#meeting-room-name').val(roomName)
+
+        if ($('.video .remote-video').length < 2) {
+            $('#local').css('width', '100%')
+        }
+
     });
 
 function notification(text) {
