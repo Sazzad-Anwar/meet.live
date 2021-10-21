@@ -1,14 +1,14 @@
 $(document)
     .ready(function () {
         let footerHeight = $('#footer').outerHeight();
-        let navHeight = $('#navbarSupportedContent').outerHeight();
-        let mainHeight = window.innerHeight - (footerHeight + navHeight);
+        let navHeight = $('#navbar').outerHeight();
+        let mainHeight = window.innerHeight - (footerHeight + 70);
 
         // $('#chat-messages').stop().animate({
         //     scrollTop: $('#chat-messages')[0].scrollHeight
         // }, 800);
 
-        console.log(window.innerHeight, footerHeight, navHeight, mainHeight);
+        console.log(`${window.innerHeight} - (${footerHeight} + ${navHeight})`, document.getElementById('navbar').offsetHeight);
 
         $('.background').css('min-height', `${mainHeight - footerHeight}px`)
         $('.mainBody').css('min-height', `${mainHeight}px`)
@@ -240,7 +240,7 @@ setTimeout(() => {
 
         $('#footer a').remove()
         $('#footer').addClass('footer-bg');
-        $('#footer').css('height', '10%');
+        $('#footer').css('height', '64px');
         $('#footer .navbar').addClass('p-0')
         $('#footer .container-fluid').removeClass('px-5')
         $('#footer .container-fluid').append(toggleMute)
