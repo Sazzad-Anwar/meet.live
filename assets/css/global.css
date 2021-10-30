@@ -113,11 +113,11 @@ p {
 }
 
 .bg-purple {
-    background-color: #fec502 !important;
+    background-color: #622c80 !important;
 }
 
 .bg-blue {
-    background-color: #000 !important;
+    background-color: #2376bc !important;
 }
 
 a {
@@ -138,19 +138,19 @@ a {
 }
 
 .custom-input-meeting-name::before {
-    background-color: #fec502;
+    background-color: #622c80;
 }
 
 .custom-input-user-name::before {
-    background-color: #000;
+    background-color: #2376bc;
 }
 
 .meeting {
-    color: #fec502;
+    color: #2376bc;
     font-weight: 700;
 }
 .meeting-2 {
-    color: #fec502;
+    color: #622c80;
     font-weight: 700;
 }
 
