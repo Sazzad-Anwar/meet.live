@@ -621,11 +621,13 @@ window.addEventListener('load', () => {
 
             if (screen && screen.getVideoTracks().length && screen.getVideoTracks()[0].readyState != 'ended') {
                 $('video').css('transform', 'scaleX(-1);')
+                $('video').css('-webkit-transform', 'scaleX(-1);')
                 stopSharingScreen();
             }
 
             else {
                 $('video').css('transform', 'scaleX(1);')
+                $('video').css('-webkit-transform', 'scaleX(1);')
                 shareScreen();
             }
         });

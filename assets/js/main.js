@@ -13,7 +13,7 @@ $(document)
         $('.background').css('min-height', `${mainHeight - footerHeight}px`)
         $('.mainBody').css('min-height', `${mainHeight}px`)
 
-        $('.mainBody .video-portion').css('min-height', `${mainHeight}px`)
+        $('.mainBody .video-portion').css('height', `${mainHeight}px`)
         $('.chat-portion').css('height', `${mainHeight - footerHeight}px`)
         // $('.chat-message-area').css('height', `${mainHeight - footerHeight}px`)
 

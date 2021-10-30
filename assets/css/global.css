@@ -92,11 +92,16 @@ p {
     padding: 2rem 0;
 }
 
+.logo img {
+    height: 200px;
+}
+
 .logo-in-meeting {
     font-family: 'Questrial', sans-serif !important;
     font-size: 2rem;
     color: white;
     text-align: center;
+    height: 50px;
 }
 
 .bg-black {
@@ -108,11 +113,11 @@ p {
 }
 
 .bg-purple {
-    background-color: #622c80 !important;
+    background-color: #fec502 !important;
 }
 
 .bg-blue {
-    background-color: #2376bc !important;
+    background-color: #000 !important;
 }
 
 a {
@@ -133,19 +138,19 @@ a {
 }
 
 .custom-input-meeting-name::before {
-    background-color: #622c80;
+    background-color: #fec502;
 }
 
 .custom-input-user-name::before {
-    background-color: #2376bc;
+    background-color: #000;
 }
 
 .meeting {
-    color: #2376bc;
+    color: #fec502;
     font-weight: 700;
 }
 .meeting-2 {
-    color: #622c80;
+    color: #fec502;
     font-weight: 700;
 }
 
@@ -463,10 +468,18 @@ video {
     background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('../images/bg.png');
 }
 
+#footer {
+    height: 50px;
+}
+
 @media screen and (min-width: 320px) and (max-width: 767px) {
     .logo {
         font-size: 4rem;
         padding: 1rem 0;
+    }
+
+    .logo img {
+        height: 150px;
     }
 
     .navbar .bottom {

@@ -305,6 +305,7 @@ export default {
         let elem = $('.video');
         let totalRemoteVideosDesktop = elem.length;
         let videoHeight = $('.video-portion').outerHeight();
+
         if (window.innerWidth < 768) {
             let newWidth = totalRemoteVideosDesktop <= 2 ? '100%' : '50%';
             for (let i = 0; i < totalRemoteVideosDesktop; i++) {
@@ -337,9 +338,9 @@ export default {
 
             for (let i = 0; i < totalRemoteVideosDesktop; i++) {
                 elem[i].style.width = newWidth;
+                $('.video')[i].style.height = `inherit`;
                 $('.video video')[i].style.width = "100%";
-                $('.video video')[i].style.height = "inherit";
-                $('.video')[i].style.height = 'auto';
+                $('.video video')[i].style.height = "100%";
             }
         }
 
