@@ -102,6 +102,8 @@ p {
     color: white;
     text-align: center;
     height: 50px;
+    display: flex;
+    align-items: center;
 }
 
 .bg-black {
